@@ -1,0 +1,28 @@
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table>
+                        <td>
+                            <?php foreach ($data as $nextData): ?>
+                                <?php foreach ($nextData as $users): ?>
+                                        <tr>
+                                            <td class="column1"> <?php echo $users['day'] ?></td>
+                                            <?php foreach ($users['user'] as $userData): ?>
+                                                <td class="column1"> <?php echo $userData['user_name'] ?> </td>
+                                                <td class="column1">
+                                                   <p>начало работы: <?php echo $userData['start_time'] ?></p>
+                                                    <p>конец работы: <?php echo $userData['end_time'] ?></p>
+                                                    <p>общее количество работы: <?php echo $userData['total_work_hour'] ?></p>
+                                                </td>
+                                            <?php endforeach;?>
+                                        </tr>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
