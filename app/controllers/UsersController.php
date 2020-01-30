@@ -7,8 +7,6 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Http\Request;
 
-use Phalcon\Http\Response;
-
 use Timetracker\Helper\Helpers;
 use Timetracker\Models\TimeDimension;
 use Timetracker\Models\Users as Users;
@@ -16,14 +14,17 @@ use Timetracker\Models\Users as Users;
 use App\Forms\LoginForm;
 use Timetracker\Models\UserWorkDay;
 use Dates\DTO\DateDTO;
+use Timetracker\Services\UsersService;
 
 class UsersController extends ControllerBase
 {
     public $loginForm;
     public $user;
+//    public $userServise;
 
     public function onConstruct()
     {
+//        $this->userServise = new UsersService();
     }
 
     public function initialize()
@@ -116,9 +117,10 @@ class UsersController extends ControllerBase
 
     public function workTableAction() {
 
+        $userService = new UsersService();
         $request = new Request();
+        $dates   = new DateDTO();
 
-        $dates = new DateDTO();
         $daysArray = array();
         $userIdArray = array();
 
@@ -145,26 +147,7 @@ class UsersController extends ControllerBase
 
         array_unshift($daysArray, "день");
 
-        try {
-
-            $builder = $this->modelsManager->createBuilder();
-
-            $builder
-                ->columns(['Timetracker\Models\Users.id as id, Timetracker\Models\Users.name as name, 
-                Timetracker\Models\UserWorkDay.total_work_hour as total_work_hour,
-                 Timetracker\Models\UserWorkDay.day as day, Timetracker\Models\UserWorkDay.start_time as start_time,
-                  Timetracker\Models\UserWorkDay.end_time as end_time, Timetracker\Models\UserWorkDay.user_id as user_id'])
-                ->from('Timetracker\Models\UserWorkDay')
-                ->innerJoin('Timetracker\Models\Users', 'Timetracker\Models\UserWorkDay.user_id = Timetracker\Models\Users.id')
-                ->orderBy('Timetracker\Models\Users.id');
-
-            $data = $builder->getQuery()->execute();
-
-            $userWorkDays = Helpers::group_by('name', $data->toArray());
-
-        } catch (\Exception $e){
-            print_r($e->getMessage());
-        }
+        $userWorkDays = $userService->getUserWorkDay();
 
         if ($request->isPost()) {
             if($request->isAjax()) {

@@ -11,7 +11,9 @@ $loader->registerDirs(
         $config->application->modelsDir,
         $config->application->pluginsDir,
         $config->application->providerDir,
-        $config->application->helperDir
+        $config->application->helperDir,
+        $config->application->servicesDir,
+
     ]
 );
 
@@ -24,6 +26,7 @@ $loader->registerNamespaces(
         'Timetracker\Providers'   => APP_PATH .'/providers',
         'Timetracker\Controllers' => APP_PATH . '/controllers',
         'Dates\DTO'               => APP_PATH . '/DTO',
+        'Timetracker\Services'    => APP_PATH . '/services',
         'Timetracker\Helper'      => APP_PATH .  '/helpers'
     ]
 );

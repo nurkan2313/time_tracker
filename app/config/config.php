@@ -24,6 +24,7 @@ return new \Phalcon\Config([
         'dtoDir'         => APP_PATH . '/DTO',
         'helperDir'      => APP_PATH . '/helpers/',
         'cacheDir'       => BASE_PATH . '/cache/',
+        'servicesDir'    => BASE_PATH . '/services',
         'baseUri'        => '/',
     ]
 ]);

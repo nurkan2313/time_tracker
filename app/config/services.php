@@ -16,6 +16,7 @@ use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Dispatcher;
 use Timetracker\Security\NotFoundPlugin;
 use Timetracker\Security\SecurityPlugin;
+use Timetracker\Services\UsersService;
 /**
  * Shared configuration service
  */
@@ -125,7 +126,6 @@ $di->setShared('session', function () {
     return $session;
 });
 
-
 $di->setShared('dispatcher', function () {
     $eventsManager = new EventsManager();
 
@@ -144,6 +144,10 @@ $di->setShared('dispatcher', function () {
     $dispatcher->setEventsManager($eventsManager);
 
     return $dispatcher;
+});
+
+$di->setShared('usersService', function () {
+    return new UsersService();
 });
 
 $di->set(
