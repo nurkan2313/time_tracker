@@ -3,13 +3,17 @@ declare(strict_types=1);
 
 namespace Timetracker\Controllers;
 
+use App\Forms\DeactivateUserForm;
 use App\Forms\RegisterForm;
 use Timetracker\Models\Users;
+use Phalcon\Http\Request;
 
 class AdminController extends \Phalcon\Mvc\Controller
 {
     public $loginForm;
     public $usersModel;
+    public $deactivateForm;
+    public $user;
 
     public function onConstruct()
     {
@@ -18,6 +22,7 @@ class AdminController extends \Phalcon\Mvc\Controller
     public function initialize()
     {
         $this->usersModel = new Users();
+        $this->deactivateForm = new DeactivateUserForm();
     }
 
     public function indexAction()
@@ -70,5 +75,39 @@ class AdminController extends \Phalcon\Mvc\Controller
 
         $this->flashSession->success('Thanks for registering!');
         return $this->response->redirect('user/login');
+    }
+
+    public function disableUserAction() {
+
+        if($this->request->isPost()) {
+
+            $this->deactivateForm->bind($_POST, $this->usersModel);
+
+            if(!$this->deactivateForm->isValid()) {
+                foreach ($this->deactivateForm->getMessages() as $message) {
+                    $this->flashSession->error($message);
+                }
+            }
+
+            try {
+
+                $this->user = $this->usersModel->findFirst([
+                    'conditions' => 'id = :id:',
+                    'bind' => [
+                        'id' => $this->request->getPost('user_id'),
+                    ]
+                ]);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
+
+            $this->user->setActive(0);
+            $this->user->update();
+            $this->flashSession->message('success', 'user ' . $this->request->getPost('user_id').  ' deactivated');
+        }
+
+        $allUsers = $this->usersModel->find();
+        $this->view->users = $allUsers;
+        $this->view->form = $this->deactivateForm;
     }
 }

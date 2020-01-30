@@ -77,7 +77,7 @@ class UsersController extends ControllerBase
         $email    = $this->request->getPost('email');
         $password = $this->request->getPost('password');
 
-        $user = Users::findFirst([
+        $user = $this->user->findFirst([
             'email = :email:',
             'bind' => [
                 'email' => $email,
