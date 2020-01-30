@@ -108,7 +108,8 @@ class SecurityPlugin extends Injectable
                 'create',
                 'create',
                 'delete',
-                'workTable'
+                'workTable',
+                'ajaxPost'
             ],
             'errors'     => ['show401', 'show404', 'show500']
         ];

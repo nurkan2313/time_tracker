@@ -22,7 +22,8 @@ return new \Phalcon\Config([
         'libraryDir'     => APP_PATH . '/library/',
         'providerDir'    => APP_PATH . '/providers',
         'dtoDir'         => APP_PATH . '/DTO',
-        'cacheDir'   => BASE_PATH . '/cache/',
+        'helperDir'      => APP_PATH . '/helpers/',
+        'cacheDir'       => BASE_PATH . '/cache/',
         'baseUri'        => '/',
     ]
 ]);

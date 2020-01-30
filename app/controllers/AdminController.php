@@ -59,8 +59,6 @@ class AdminController extends \Phalcon\Mvc\Controller
 
         if (!$this->usersModel->save()) {
             foreach ($this->usersModel->getMessages() as $m) {
-                print_r($m);
-                die();
                 $this->flashSession->error($m);
                 $this->dispatcher->forward([
                     'controller' => $this->router->getControllerName(),

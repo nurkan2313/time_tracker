@@ -1,25 +1,73 @@
+<?php
+
+//echo '<pre>';
+//print_r($data);
+//echo '</pre>';
+//echo  $userId;
+?>
+
 <div class="limiter">
     <div class="container-table100">
         <div class="wrap-table100">
             <div class="table100">
                 <table>
-                        <td>
-                            <?php foreach ($data as $nextData): ?>
-                                <?php foreach ($nextData as $users): ?>
-                                        <tr>
-                                            <td class="column1"> <?php echo $users['day'] ?></td>
-                                            <?php foreach ($users['user'] as $userData): ?>
-                                                <td class="column1"> <?php echo $userData['user_name'] ?> </td>
-                                                <td class="column1">
-                                                   <p>начало работы: <?php echo $userData['start_time'] ?></p>
-                                                    <p>конец работы: <?php echo $userData['end_time'] ?></p>
-                                                    <p>общее количество работы: <?php echo $userData['total_work_hour'] ?></p>
-                                                </td>
-                                            <?php endforeach;?>
-                                        </tr>
-                                <?php endforeach; ?>
+                    <tbody>
+
+                        <tr>
+                            <?php foreach($days as $day): ?>
+                                <td><?php echo $day;?></td>
                             <?php endforeach; ?>
-                        </td>
+                        </tr>
+
+                        <?php foreach($data as $key=>$val): ?>
+                        <tr>
+                            <td><?php echo $key; ?></td>
+
+                            <?php foreach($val as $index=>$itemVal): ?>
+                                <td style="width: 54px; text-align: center;">
+
+                                    <!--  Определенный день -->
+                                    <?php if( $userId == $itemVal['id'] and $dayOfMonth == $itemVal['day'] ): ?>
+
+                                        <?php if($itemVal['start_time'] != null): ?>
+                                            <input type="button" class="btn btn-outline-primary"
+                                                   id="start"
+                                                   data-start="stop"
+                                                   onclick="checkInputTime(this);"
+                                                   data-timeinfo=""
+                                                   value="стоп" />
+                                        <?php else: ?>
+                                            <input type="button" class="btn btn-outline-primary"
+                                                   id="start"
+                                                   onclick="checkInputTime(this);"
+                                                   data-timeinfo=""
+                                                   data-start="start"
+                                                   value="старт" />
+                                        <?php endif; ?>
+
+                                        <div id="startTime">
+                                            <?php echo $itemVal['start_time']; ?>
+                                        </div> -
+                                        <div id="endTime">
+                                            <?php echo $itemVal['end_time']; ?>
+                                        </div>
+                                    <!--  Неопределенный день -->
+                                    <?php else: ?>
+                                        <div id="startTimeOtherDay">
+                                            <?php echo $itemVal['start_time']; ?>
+                                        </div> -
+                                        <div id="endTimeOtherDay">
+                                            <?php echo $itemVal['end_time']; ?>
+                                        </div>
+
+                                    <?php endif; ?>
+
+                                </td>
+                            <?php endforeach; ?>
+
+                        </tr>
+                        <?php endforeach; ?>
+
                     </tbody>
                 </table>
             </div>

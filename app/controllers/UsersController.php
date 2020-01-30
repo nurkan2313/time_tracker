@@ -5,8 +5,14 @@ namespace Timetracker\Controllers;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Http\Request;
+
+use Phalcon\Http\Response;
+
+use Timetracker\Helper\Helpers;
 use Timetracker\Models\TimeDimension;
-use Timetracker\Models\Users;
+use Timetracker\Models\Users as Users;
+
 use App\Forms\LoginForm;
 use Timetracker\Models\UserWorkDay;
 use Dates\DTO\DateDTO;
@@ -25,6 +31,7 @@ class UsersController extends ControllerBase
         $this->loginForm = new LoginForm();
         $this->user = new Users();
     }
+
     /**
      * Index action
      */
@@ -109,7 +116,18 @@ class UsersController extends ControllerBase
 
     public function workTableAction() {
 
+        $request = new Request();
+
         $dates = new DateDTO();
+        $daysArray = array();
+        $userIdArray = array();
+
+        $users = Users::find();
+
+        foreach ($users as $id) {
+            array_push($userIdArray, $id->getId());
+        }
+
         $calendar = TimeDimension::find(
             [
                 'conditions' => 'year = :year: and month = :month:',
@@ -120,40 +138,84 @@ class UsersController extends ControllerBase
             ]
         );
 
-        $workDay = UserWorkDay::find();
-        $user = array();
-        $calendarArrayToFillUp = array();
-
         foreach ($calendar as $cal )
         {
-            $calendarArrayToFillUp[] = array(
-                    'data' => [
-                        'day' => $cal->day,
-                        'month' => '',
-                        'user' => $user,
-                    ]
-            );
+            array_push($daysArray, $cal->day);
         }
 
-        foreach ($calendarArrayToFillUp as $key=>$fillUserData) {
-            foreach ($fillUserData as $item) {
-                foreach ($workDay as $work) {
-                    if($work->day === $item['day']) {
-                        $user_id = $work->user_id;
-                        $userName = Users::findFirst($user_id)->getName();
-                        $calendarArrayToFillUp[$key]['data']['user'][] = array(
-                            'total_work_hour' => $work->total_work_hour,
-                            'start_time' => $work->start_time,
-                            'end_time' => $work->end_time,
-                            'user_name' => $userName
-                       );
+        array_unshift($daysArray, "день");
 
+        try {
+
+            $builder = $this->modelsManager->createBuilder();
+
+            $builder
+                ->columns(['Timetracker\Models\Users.id as id, Timetracker\Models\Users.name as name, 
+                Timetracker\Models\UserWorkDay.total_work_hour as total_work_hour,
+                 Timetracker\Models\UserWorkDay.day as day, Timetracker\Models\UserWorkDay.start_time as start_time,
+                  Timetracker\Models\UserWorkDay.end_time as end_time, Timetracker\Models\UserWorkDay.user_id as user_id'])
+                ->from('Timetracker\Models\UserWorkDay')
+                ->innerJoin('Timetracker\Models\Users', 'Timetracker\Models\UserWorkDay.user_id = Timetracker\Models\Users.id')
+                ->orderBy('Timetracker\Models\Users.id');
+
+            $data = $builder->getQuery()->execute();
+
+            $userWorkDays = Helpers::group_by('name', $data->toArray());
+
+        } catch (\Exception $e){
+            print_r($e->getMessage());
+        }
+
+        if ($request->isPost()) {
+            if($request->isAjax()) {
+
+                try {
+                    if ($request->getPost('checkButtonInput') == 'старт') {
+
+                        $key = $request->getPost('key');
+                        $day = $request->getPost('day');
+
+                        $workHour = UserWorkDay::findFirst([
+                            'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
+                            'bind' => [
+                                'user_id' => $this->session->get('AUTH_ID'),
+                                'day'     => $day
+                            ]
+                        ]);
+
+                        $workHour->start_time = $key;
+                        $workHour->update();
+
+                        return $workHour->start_time;
+                    } else {
+
+                        $key = $request->getPost('key');
+                        $day = $request->getPost('day');
+
+                        $workHour = UserWorkDay::findFirst([
+                            'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
+                            'bind' => [
+                                'user_id' => $this->session->get('AUTH_ID'),
+                                'day'     => $day
+                            ]
+                        ]);
+
+                        $workHour->end_time = $key;
+                        $workHour->update();
+
+                        return $workHour->end_time;
                     }
+                } catch (\Exception $exception) {
+                   echo $exception->getMessage();
                 }
+
             }
         }
 
-        $this->view->data = $calendarArrayToFillUp;
+        $this->view->dayOfMonth = $dates->getDay();
+        $this->view->userId = $this->session->get('AUTH_ID');
+        $this->view->days = $daysArray;
+        $this->view->data = $userWorkDays;
     }
 
     /**
