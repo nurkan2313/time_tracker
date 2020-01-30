@@ -18,11 +18,10 @@ function checkInputTime() {
         $.ajax({
             url:"/user/worktable",
             method:"POST",
-            data:{ key : total, day: n, checkButtonInput: 'старт' },
-            success : function(data) {
-                $('div#startTime').text(data);
+            data:{ key : total, day: n, start: 'старт', stop: '' },
+            success : function() {
+                $('div#startTime').text(total);
                 $('input#start').val('стоп');
-                return data;
             },
             error: function (request, status, error) {
                 console.log(error);
@@ -39,12 +38,10 @@ function checkInputTime() {
         $.ajax({
             url:"/user/worktable",
             method:"POST",
-            data:{ key : stopTime, day: date, checkButtonInput: 'стоп' },
-            success : function(data) {
-                console.log(data);
-                $('div#endTime').text(data);
+            data:{ key : stopTime, day: date, start: '', stop: 'стоп' },
+            success : function() {
+                $('div#endTime').text(stopTime);
                 $('input#start').val('старт');
-                return data;
             },
             error: function (request, status, error) {
                 console.log(error);
@@ -52,3 +49,8 @@ function checkInputTime() {
         });
     }
 }
+
+$('#myAlert').on('closed.bs.alert', function () {
+    $('.alert').alert('close');
+
+});

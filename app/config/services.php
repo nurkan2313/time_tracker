@@ -150,9 +150,7 @@ $di->setShared('usersService', function () {
     return new UsersService();
 });
 
-$di->set(
-    "modelsManager",
-    function() {
+$di->set("modelsManager", function() {
         return new ModelsManager();
     }
 );

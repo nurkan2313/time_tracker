@@ -110,4 +110,11 @@ class AdminController extends \Phalcon\Mvc\Controller
         $this->view->users = $allUsers;
         $this->view->form = $this->deactivateForm;
     }
+
+    public function usersManagement() {
+
+        
+        $this->usersModel->find();
+
+    }
 }

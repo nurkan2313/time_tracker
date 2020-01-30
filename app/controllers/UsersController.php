@@ -128,6 +128,7 @@ class UsersController extends ControllerBase
 
         $users = $this->user->find();
 
+        /////////// add to other method
         foreach ($users as $id) {
             array_push($userIdArray, $id->getId());
         }
@@ -146,51 +147,14 @@ class UsersController extends ControllerBase
         }
 
         array_unshift($daysArray, "день");
+        ////////////////////////////////
 
         $userWorkDays = $userService->getUserWorkDay();
 
         if ($request->isPost()) {
             if($request->isAjax()) {
-
-                try {
-                    if ($request->getPost('checkButtonInput') == 'старт') {
-
-                        $key = $request->getPost('key');
-                        $day = $request->getPost('day');
-
-                        $workHour = $this->userWorkDay->findFirst([
-                            'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
-                            'bind' => [
-                                'user_id' => $this->session->get('AUTH_ID'),
-                                'day'     => $day
-                            ]
-                        ]);
-
-                        $workHour->start_time = $key;
-                        $workHour->update();
-
-                        return $workHour->start_time;
-                    } else {
-
-                        $key = $request->getPost('key');
-                        $day = $request->getPost('day');
-
-                        $workHour = $this->userWorkDay->findFirst([
-                            'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
-                            'bind' => [
-                                'user_id' => $this->session->get('AUTH_ID'),
-                                'day'     => $day
-                            ]
-                        ]);
-
-                        $workHour->end_time = $key;
-                        $workHour->update();
-
-                        return $workHour->end_time;
-                    }
-                } catch (\Exception $exception) {
-                   echo $exception->getMessage();
-                }
+                // начать или остановить рабочий день
+                $this->userTimeSwitcherButton($request);
             }
         }
 
@@ -198,6 +162,37 @@ class UsersController extends ControllerBase
         $this->view->userId = $this->session->get('AUTH_ID');
         $this->view->days = $daysArray;
         $this->view->data = $userWorkDays;
+    }
+
+    public function userTimeSwitcherButton(Request $request) {
+        try {
+
+            $key = $request->getPost('key');
+            $day = $request->getPost('day');
+
+            $workHour = $this->userWorkDay->findFirst([
+                'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
+                'bind' => [
+                    'user_id' => $this->session->get('AUTH_ID'),
+                    'day'     => $day
+                ]
+            ]);
+
+            if($request->getPost('start') == 'старт') {
+                $workHour->start_time = $key;
+                $workHour->update();
+                return $workHour->start_time;
+            }
+
+            if($request->getPost('stop') == 'стоп') {
+                $workHour->end_time = $key;
+                $workHour->update();
+                return;
+            }
+
+        } catch (\Exception $exception) {
+            echo $exception->getMessage();
+        }
     }
 
     /**

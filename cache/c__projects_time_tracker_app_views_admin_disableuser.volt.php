@@ -1,7 +1,11 @@
-<div class="container">
     <h2>удаление пользователя</h2>
 
-    <p><?php echo $this->flashSession->output() ?></p>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <strong><?php echo $this->flashSession->output() ?></strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
     <ul class="list-group">
         <?php foreach ($users as $user) { ?>
@@ -24,4 +28,3 @@
     </div>
 
     </form>
-</div>
