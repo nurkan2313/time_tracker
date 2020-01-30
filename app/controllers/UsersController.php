@@ -20,17 +20,19 @@ class UsersController extends ControllerBase
 {
     public $loginForm;
     public $user;
-//    public $userServise;
+    public $timeDimension;
+    public $userWorkDay;
 
     public function onConstruct()
     {
-//        $this->userServise = new UsersService();
     }
 
     public function initialize()
     {
-        $this->loginForm = new LoginForm();
-        $this->user = new Users();
+        $this->loginForm     = new LoginForm();
+        $this->user          = new Users();
+        $this->timeDimension = new TimeDimension();
+        $this->userWorkDay   = new UserWorkDay();
     }
 
     /**
@@ -124,21 +126,19 @@ class UsersController extends ControllerBase
         $daysArray = array();
         $userIdArray = array();
 
-        $users = Users::find();
+        $users = $this->user->find();
 
         foreach ($users as $id) {
             array_push($userIdArray, $id->getId());
         }
 
-        $calendar = TimeDimension::find(
-            [
-                'conditions' => 'year = :year: and month = :month:',
-                'bind'       => [
-                    'year' => $dates->getYear(),
-                    'month' => $dates->getMonth(),
-                ]
+        $calendar = $this->timeDimension->find( [
+            'conditions' => 'year = :year: and month = :month:',
+            'bind'       => [
+                'year' => $dates->getYear(),
+                'month' => $dates->getMonth(),
             ]
-        );
+        ]);
 
         foreach ($calendar as $cal )
         {
@@ -158,7 +158,7 @@ class UsersController extends ControllerBase
                         $key = $request->getPost('key');
                         $day = $request->getPost('day');
 
-                        $workHour = UserWorkDay::findFirst([
+                        $workHour = $this->userWorkDay->findFirst([
                             'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
                             'bind' => [
                                 'user_id' => $this->session->get('AUTH_ID'),
@@ -175,7 +175,7 @@ class UsersController extends ControllerBase
                         $key = $request->getPost('key');
                         $day = $request->getPost('day');
 
-                        $workHour = UserWorkDay::findFirst([
+                        $workHour = $this->userWorkDay->findFirst([
                             'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
                             'bind' => [
                                 'user_id' => $this->session->get('AUTH_ID'),
@@ -191,7 +191,6 @@ class UsersController extends ControllerBase
                 } catch (\Exception $exception) {
                    echo $exception->getMessage();
                 }
-
             }
         }
 
