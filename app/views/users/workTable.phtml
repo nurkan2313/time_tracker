@@ -1,76 +1,92 @@
 <?php
 
 //echo '<pre>';
-//print_r($data);
+//print_r($total);
 //echo '</pre>';
-//echo  $userId;
 ?>
 
-<div class="limiter">
-    <div class="container-table100">
-        <div class="wrap-table100">
-            <div class="table100">
-                <table>
-                    <tbody>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
 
-                        <tr>
-                            <?php foreach($days as $day): ?>
-                                <td><?php echo $day;?></td>
-                            <?php endforeach; ?>
-                        </tr>
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-4">My Hours Log</h1>
+                    <p>You have: <?php echo $total; ?></p>
+                    <p>You have/Assigned: <?php echo $assigned; ?></p>
+                    <p>Assigned: <?php echo $totalHour; ?></p>
+                    <p>Ты опоздал: </p> 0 раз
+                </div>
+            </div>
 
-                        <?php foreach($data as $key=>$val): ?>
-                        <tr>
-                            <td><?php echo $key; ?></td>
 
-                            <?php foreach($val as $index=>$itemVal): ?>
-                                <td style="width: 54px; text-align: center;">
-
-                                    <!--  Определенный день -->
-                                    <?php if( $userId == $itemVal['id'] and $dayOfMonth == $itemVal['day'] ): ?>
-
-                                        <?php if($itemVal['start_time'] != null): ?>
-                                            <input type="button" class="btn btn-outline-primary"
-                                                   id="start"
-                                                   data-start="stop"
-                                                   onclick="checkInputTime(this);"
-                                                   data-timeinfo=""
-                                                   value="стоп" />
-                                        <?php else: ?>
-                                            <input type="button" class="btn btn-outline-primary"
-                                                   id="start"
-                                                   onclick="checkInputTime(this);"
-                                                   data-timeinfo=""
-                                                   data-start="start"
-                                                   value="старт" />
-                                        <?php endif; ?>
-
-                                        <div id="startTime">
-                                            <?php echo $itemVal['start_time']; ?>
-                                        </div> -
-                                        <div id="endTime">
-                                            <?php echo $itemVal['end_time']; ?>
-                                        </div>
-                                    <!--  Неопределенный день -->
-                                    <?php else: ?>
-                                        <div id="startTimeOtherDay">
-                                            <?php echo $itemVal['start_time']; ?>
-                                        </div> -
-                                        <div id="endTimeOtherDay">
-                                            <?php echo $itemVal['end_time']; ?>
-                                        </div>
-
-                                    <?php endif; ?>
-
-                                </td>
-                            <?php endforeach; ?>
-
-                        </tr>
+            <div class="table-responsive">
+                <table summary="This table shows how to create responsive tables using Bootstrap's default functionality" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th>день</th>
+                        <?php foreach ($users as $user): ?>
+                            <th><?php echo $user->name; ?></th>
                         <?php endforeach; ?>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($data as $day=>$val): ?>
+
+                        <tr>
+                            <td scope="row"> <?php echo $day; ?></td>
+
+                            <?php foreach($val as $userItem): ?>
+                                <?php foreach ($users as $user): ?>
+
+                                    <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
+
+                                        <td>
+                                            <?php if( $userId == $userItem['id'] and $day == $dayOfMonth ): ?>
+
+                                                <?php if($userItem['start_time'] != null): ?>
+                                                    <input type="button" class="btn btn-outline-primary"
+                                                           id="start"
+                                                           data-start="stop"
+                                                           onclick="checkInputTime(this);"
+                                                           data-timeinfo=""
+                                                           value="стоп" />
+                                                <?php else: ?>
+                                                    <input type="button" class="btn btn-outline-primary"
+                                                           id="start"
+                                                           onclick="checkInputTime(this);"
+                                                           data-timeinfo=""
+                                                           data-start="start"
+                                                           value="старт" />
+                                                <?php endif; ?>
+
+                                                <div id="startTime">
+                                                    <?php echo $userItem['start_time']; ?>
+                                                </div> -
+                                                <div id="endTime">
+                                                    <?php echo $userItem['end_time']; ?>
+                                                </div>
+                                            <?php else: ?>
+                                                <div id="startTimeOtherDay">
+                                                    <?php echo $userItem['start_time']; ?>
+                                                </div> -
+                                                <div id="endTimeOtherDay">
+                                                    <?php echo $userItem['end_time']; ?>
+                                                </div>
+                                            <?php endif ?>
+                                        </td>
+
+                                    <?php endif?>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </tr>
+
+                    <?php endforeach ?>
 
                     </tbody>
+
                 </table>
-            </div>
+            </div><!--end of .table-responsive-->
         </div>
     </div>
 </div>

@@ -13,6 +13,7 @@
     {{ stylesheet_link('css/perfect-scrollbar.css') }}
     {{ stylesheet_link('css/util.css') }}
     {{ stylesheet_link('css/main.css') }}
+    {{ stylesheet_link('css/table.css') }}
 </head>
 <body>
 

@@ -9,18 +9,28 @@
 namespace Timetracker\Helper;
 
 
+use Timetracker\Models\Users;
+
 class Helpers
 {
+    public static function group_by($key, $data, $daysArray) {
+        $res = array();
+        $users = Users::find();
+        $usersArray = array();
 
-    public static function group_by($key, $data) {
-        $result = array();
-        foreach($data as $val) {
-            if(array_key_exists($key, $val)){
-                $result[$val[$key]][] = $val;
-            }else{
-                $result[""][] = $val;
+        foreach ($users as $user) {
+            array_push($usersArray, $user->getName());
+        }
+
+        foreach($daysArray as $cnt) {
+            foreach($data as $key => $day) {
+                if ($day['day'] == $cnt)
+                {
+                    $res[$day['day']][] = $day;
+                }
             }
         }
-        return $result;
+
+        return $res;
     }
 }

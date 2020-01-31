@@ -123,32 +123,6 @@ class UsersController extends ControllerBase
         $request = new Request();
         $dates   = new DateDTO();
 
-        $daysArray = array();
-        $userIdArray = array();
-
-        $users = $this->user->find();
-
-        /////////// add to other method
-        foreach ($users as $id) {
-            array_push($userIdArray, $id->getId());
-        }
-
-        $calendar = $this->timeDimension->find( [
-            'conditions' => 'year = :year: and month = :month:',
-            'bind'       => [
-                'year' => $dates->getYear(),
-                'month' => $dates->getMonth(),
-            ]
-        ]);
-
-        foreach ($calendar as $cal )
-        {
-            array_push($daysArray, $cal->day);
-        }
-
-        array_unshift($daysArray, "день");
-        ////////////////////////////////
-
         $userWorkDays = $userService->getUserWorkDay();
 
         if ($request->isPost()) {
@@ -160,7 +134,10 @@ class UsersController extends ControllerBase
 
         $this->view->dayOfMonth = $dates->getDay();
         $this->view->userId = $this->session->get('AUTH_ID');
-        $this->view->days = $daysArray;
+        $this->view->users = $userService->getUsers();
+        $this->view->total = $userService->calculateUserTotalHour();
+        $this->view->totalHour = $userService->totalHourPerMonth();
+        $this->view->assigned = $userService->calculateAssignedHour();
         $this->view->data = $userWorkDays;
     }
 

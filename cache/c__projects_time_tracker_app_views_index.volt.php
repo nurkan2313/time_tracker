@@ -13,6 +13,7 @@
     <?= $this->tag->stylesheetLink('css/perfect-scrollbar.css') ?>
     <?= $this->tag->stylesheetLink('css/util.css') ?>
     <?= $this->tag->stylesheetLink('css/main.css') ?>
+    <?= $this->tag->stylesheetLink('css/table.css') ?>
 </head>
 <body>
 
