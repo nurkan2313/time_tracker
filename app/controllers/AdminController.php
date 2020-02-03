@@ -5,8 +5,10 @@ namespace Timetracker\Controllers;
 
 use App\Forms\DeactivateUserForm;
 use App\Forms\RegisterForm;
+use Dates\DTO\DateDTO;
 use Timetracker\Models\Users;
 use Phalcon\Http\Request;
+use Timetracker\Services\AdminService;
 
 class AdminController extends \Phalcon\Mvc\Controller
 {
@@ -15,9 +17,7 @@ class AdminController extends \Phalcon\Mvc\Controller
     public $deactivateForm;
     public $user;
 
-    public function onConstruct()
-    {
-    }
+    public function onConstruct() {}
 
     public function initialize()
     {
@@ -111,10 +111,12 @@ class AdminController extends \Phalcon\Mvc\Controller
         $this->view->form = $this->deactivateForm;
     }
 
-    public function usersManagement() {
-
+    public function usersManagementAction() {
+        $adminService = new AdminService();
+        $request = new Request();
+        $dates   = new DateDTO();
         
-        $this->usersModel->find();
-
+        $this->view->usersTable = $adminService->getUserWorkDay();
+        $this->view->users = $adminService->getUsers();
     }
 }

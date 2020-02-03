@@ -13,7 +13,6 @@ $loader->registerDirs(
         $config->application->providerDir,
         $config->application->helperDir,
         $config->application->servicesDir,
-
     ]
 );
 

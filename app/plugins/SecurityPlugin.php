@@ -34,6 +34,13 @@ class SecurityPlugin extends Injectable
         $controller = $dispatcher->getControllerName();
         $action = $dispatcher->getActionName();
 
+        /* Debugbar start */
+        $ns = $dispatcher->getNamespaceName();
+        if ($ns=='Snowair\Debugbar\Controllers') {
+            return true;
+        }
+        /* Debugbar end */
+
         $acl = $this->getAcl();
 
         if (!$acl->isComponent($controller)) {

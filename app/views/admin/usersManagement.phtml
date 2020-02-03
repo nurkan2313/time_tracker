@@ -9,28 +9,18 @@
     <div class="row">
         <div class="col-12">
 
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                    <h1 class="display-4">My Hours Log</h1>
-                    <p>You have: <?php echo $total; ?></p>
-                    <p>You have/Assigned: <?php echo $assigned; ?></p>
-                    <p>Assigned: <?php echo $totalHour; ?></p>
-                    <p>Ты опоздал: </p> 0 раз
-                </div>
-            </div>
-
             <div class="table-responsive">
                 <table summary="This table shows how to create responsive tables using Bootstrap's default functionality" class="table table-bordered table-hover">
                     <thead>
-                        <tr>
-                            <th>день</th>
-                            <?php foreach ($users as $user): ?>
-                                <th><?php echo $user->name; ?></th>
-                            <?php endforeach; ?>
-                        </tr>
-                        </thead>
+                    <tr>
+                        <th>день</th>
+                        <?php foreach ($users as $user): ?>
+                            <th><?php echo $user->name; ?></th>
+                        <?php endforeach; ?>
+                    </tr>
+                    </thead>
                     <tbody>
-                    <?php foreach ($data as $day=>$val): ?>
+                    <?php foreach ($usersTable as $day=>$val): ?>
 
                         <tr>
                             <td scope="row"> <?php echo $day; ?></td>

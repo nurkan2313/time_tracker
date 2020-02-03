@@ -17,7 +17,8 @@
     "codeception/codeception": "^3.1",
     "phalcon/ide-stubs": "^4.0.0",
     "squizlabs/php_codesniffer": "^3.5",
-    "vimeo/psalm": "^3.6"
+    "vimeo/psalm": "^3.6",
+    "snowair/phalcon-debugbar": "^1.2"
   },
   "autoload": {
     "psr-4": {

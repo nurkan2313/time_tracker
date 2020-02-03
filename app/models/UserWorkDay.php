@@ -53,6 +53,10 @@ class UserWorkDay extends \Phalcon\Mvc\Model
      */
     public $time_dimension_id;
 
+    public $month;
+
+    public $year;
+
     /**
      * Initialize method for model.
      */

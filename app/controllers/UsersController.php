@@ -118,58 +118,23 @@ class UsersController extends ControllerBase
     public function profileAction(){}
 
     public function workTableAction() {
-
         $userService = new UsersService();
         $request = new Request();
         $dates   = new DateDTO();
 
-        $userWorkDays = $userService->getUserWorkDay();
-
         if ($request->isPost()) {
             if($request->isAjax()) {
-                // начать или остановить рабочий день
-                $this->userTimeSwitcherButton($request);
+                $userService->userTimeSwitcherButton($request);
             }
         }
 
         $this->view->dayOfMonth = $dates->getDay();
-        $this->view->userId = $this->session->get('AUTH_ID');
-        $this->view->users = $userService->getUsers();
-        $this->view->total = $userService->calculateUserTotalHour();
+        $this->view->userId    = $this->session->get('AUTH_ID');
+        $this->view->users     = $userService->getUsers();
+        $this->view->total     = $userService->calculateUserTotalHour();
         $this->view->totalHour = $userService->totalHourPerMonth();
-        $this->view->assigned = $userService->calculateAssignedHour();
-        $this->view->data = $userWorkDays;
-    }
-
-    public function userTimeSwitcherButton(Request $request) {
-        try {
-
-            $key = $request->getPost('key');
-            $day = $request->getPost('day');
-
-            $workHour = $this->userWorkDay->findFirst([
-                'conditions' => 'user_id = :user_id: AND ' . ' day = :day:',
-                'bind' => [
-                    'user_id' => $this->session->get('AUTH_ID'),
-                    'day'     => $day
-                ]
-            ]);
-
-            if($request->getPost('start') == 'старт') {
-                $workHour->start_time = $key;
-                $workHour->update();
-                return $workHour->start_time;
-            }
-
-            if($request->getPost('stop') == 'стоп') {
-                $workHour->end_time = $key;
-                $workHour->update();
-                return;
-            }
-
-        } catch (\Exception $exception) {
-            echo $exception->getMessage();
-        }
+        $this->view->assigned  = $userService->calculateAssignedHour();
+        $this->view->data      = $userService->getUserWorkDay();
     }
 
     /**
