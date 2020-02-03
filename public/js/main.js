@@ -50,3 +50,8 @@ function checkInputTime() {
 $('#myAlert').on('closed.bs.alert', function () {
     $('.alert').alert('close');
 });
+
+
+function changeUsersTime() {
+    
+}

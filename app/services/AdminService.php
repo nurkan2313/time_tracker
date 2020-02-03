@@ -78,10 +78,9 @@ class AdminService extends Injectable
                           IFNULL( (SELECT  Timetracker\Models\Users.name 
                                         FROM Timetracker\Models\Users
                                         WHERE Timetracker\Models\Users.id =  ".$usr." ),0) as name
-                      FROM Timetracker\Models\UserWorkDay ");
+                      FROM Timetracker\Models\UserWorkDay ")->execute();
 
-                    $query->execute();
-                    
+
                     foreach ($query as $item) {
                         $res[$day['day']][] = [
                             'name' => $item->name,
@@ -90,7 +89,6 @@ class AdminService extends Injectable
                             'id' => $usr
                         ];
                     }
-
                 }
             }
 

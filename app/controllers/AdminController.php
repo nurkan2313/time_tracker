@@ -115,7 +115,8 @@ class AdminController extends \Phalcon\Mvc\Controller
         $adminService = new AdminService();
         $request = new Request();
         $dates   = new DateDTO();
-        
+
+        $this->view->dayOfMonth = $dates->getDay();
         $this->view->usersTable = $adminService->getUserWorkDay();
         $this->view->users = $adminService->getUsers();
     }

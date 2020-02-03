@@ -21,6 +21,7 @@ $router->add('/user/worktable', ['controller' => 'users', 'action' => 'workTable
 $router->add('/user/register', ['controller' => 'admin', 'action' => 'register']);
 $router->add('/user/register/submit', ['controller' => 'admin', 'action' => 'registerSubmit']);
 $router->add('/admin/disableUser', ['controller' => 'admin', 'action' => 'disableUser']);
+$router->add('/admin/manageUsers', ['controller' => 'admin', 'action' => 'usersManagement']);
 
 // 404
 $router->notFound(['controller' => 'index', 'action' => 'route404']);

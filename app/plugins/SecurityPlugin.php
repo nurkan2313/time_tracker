@@ -94,7 +94,7 @@ class SecurityPlugin extends Injectable
 
         //Private area resources
         $privateResources = [
-            'admin'    => ['index', 'register', 'registerSubmit', 'disableUser'],
+            'admin'    => ['index', 'register', 'registerSubmit', 'disableUser', 'usersManagement'],
         ];
 
         foreach ($privateResources as $resource => $actions) {

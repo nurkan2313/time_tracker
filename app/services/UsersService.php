@@ -58,21 +58,23 @@ class UsersService extends Injectable
                 foreach ($usersArray as $usr) {
 
                 $query = $this->modelsManager->createQuery("
-                  SELECT DISTINCT 
-                  IFNULL( (SELECT Timetracker\Models\UserWorkDay.start_time
-                               FROM Timetracker\Models\UserWorkDay
-                               WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
-                               and Timetracker\Models\UserWorkDay.day = ".$day['day']." 
-                               and Timetracker\Models\UserWorkDay.month = ".$day['month']."
-                               and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as start_time,
-                  IFNULL( (SELECT Timetracker\Models\UserWorkDay.end_time  
-                               FROM Timetracker\Models\UserWorkDay 
-                               WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
-                                and Timetracker\Models\UserWorkDay.day = " .$day['day'] ."
-                                and Timetracker\Models\UserWorkDay.month = ".$day['month']."
-                                and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as end_time,
-                  IFNULL( (SELECT  Timetracker\Models\Users.name FROM Timetracker\Models\Users WHERE Timetracker\Models\Users.id =  ".$usr." ),0) as name
-                  FROM Timetracker\Models\UserWorkDay ")
+                          SELECT DISTINCT 
+                          IFNULL( (SELECT Timetracker\Models\UserWorkDay.start_time
+                                       FROM Timetracker\Models\UserWorkDay
+                                       WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
+                                       and Timetracker\Models\UserWorkDay.day = ".$day['day']." 
+                                       and Timetracker\Models\UserWorkDay.month = ".$day['month']."
+                                       and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as start_time,
+                          IFNULL( (SELECT Timetracker\Models\UserWorkDay.end_time  
+                                       FROM Timetracker\Models\UserWorkDay 
+                                       WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
+                                        and Timetracker\Models\UserWorkDay.day = " .$day['day'] ."
+                                        and Timetracker\Models\UserWorkDay.month = ".$day['month']."
+                                        and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as end_time,
+                          IFNULL( (SELECT  Timetracker\Models\Users.name 
+                                    FROM Timetracker\Models\Users
+                                    WHERE Timetracker\Models\Users.id =  ".$usr." ),0) as name
+                          FROM Timetracker\Models\UserWorkDay ")
                         ->execute();
                     foreach ($query as $item) {
                         $res[$day['day']][] = [

@@ -1,81 +1,55 @@
-<?php
-
-//echo '<pre>';
-//print_r($total);
-//echo '</pre>';
-?>
 
 <div class="container">
     <div class="row">
         <div class="col-12">
-
-            <div class="table-responsive">
-                <table summary="This table shows how to create responsive tables using Bootstrap's default functionality" class="table table-bordered table-hover">
-                    <thead>
+            <h1>admin page</h1>
+            <br>
+            <table class="table table-bordered table-striped">
+                <thead>
                     <tr>
-                        <th>день</th>
+                        <th scope="col">день</th>
                         <?php foreach ($users as $user): ?>
-                            <th><?php echo $user->name; ?></th>
+                            <th scope="col"><?php echo $user->name; ?></th>
                         <?php endforeach; ?>
                     </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($usersTable as $day=>$val): ?>
+                </thead>
 
-                        <tr>
-                            <td scope="row"> <?php echo $day; ?></td>
+                <tbody>
+                <?php foreach ($usersTable as $day=>$val): ?>
+                    <tr>
+                        <td scope="row"> <?php echo $day; ?></td>
 
-                            <?php foreach($val as $userItem): ?>
-                                <?php foreach ($users as $user): ?>
+                        <?php foreach($val as $userItem): ?>
+                            <?php foreach ($users as $user): ?>
 
-                                    <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
+                                <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
 
-                                        <td>
-                                            <?php if( $userId == $userItem['id'] and $day == $dayOfMonth ): ?>
+                                    <td>
 
-                                                <?php if($userItem['start_time'] != null and $userItem['start_time'] != '' and $userItem['start_time'] != 0): ?>
-                                                    <input type="button" class="btn btn-primary"
-                                                           id="start"
-                                                           data-start="stop"
-                                                           onclick="checkInputTime(this);"
-                                                           data-timeinfo=""
-                                                           value="стоп" />
-                                                <?php else: ?>
-                                                    <input type="button" class="btn btn-success"
-                                                           id="start"
-                                                           onclick="checkInputTime(this);"
-                                                           data-timeinfo=""
-                                                           data-start="start"
-                                                           value="старт" />
-                                                <?php endif; ?>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="<?php echo $userItem['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" onclick="changeUsersTime(this)" type="button" id="button-addon2">Старт</button>
+                                            </div>
+                                        </div>
 
-                                                <div id="startTime">
-                                                    <?php echo $userItem['start_time']; ?>
-                                                </div> -
-                                                <div id="endTime">
-                                                    <?php echo $userItem['end_time']; ?>
-                                                </div>
-                                            <?php else: ?>
-                                                <div id="startTimeOtherDay">
-                                                    <?php echo $userItem['start_time']; ?>
-                                                </div> -
-                                                <div id="endTimeOtherDay">
-                                                    <?php echo $userItem['end_time']; ?>
-                                                </div>
-                                            <?php endif ?>
-                                        </td>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="<?php echo $userItem['end_time'] ?>" aria-label="end_time" aria-describedby="button-addon2">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Стоп</button>
+                                            </div>
+                                        </div>
 
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
+                                    </td>
+                                <?php endif; ?>
                             <?php endforeach; ?>
-                        </tr>
+                        <?php endforeach; ?>
+                    </tr>
 
-                    <?php endforeach ?>
+                <?php endforeach ?>
 
-                    </tbody>
-
-                </table>
-            </div><!--end of .table-responsive-->
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
