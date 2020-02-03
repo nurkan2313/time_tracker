@@ -51,7 +51,64 @@ $('#myAlert').on('closed.bs.alert', function () {
     $('.alert').alert('close');
 });
 
+function changeUsersTime(el) {
 
-function changeUsersTime() {
-    
+    var val = el.parentNode
+      .parentNode
+      .querySelector('.form-control')
+      .value;
+    var id = el.getAttribute('data-id');
+    var day = el.getAttribute('data-day');
+    var month = el.getAttribute('data-month');
+    var year = el.getAttribute('data-year');
+
+    if(val === '') {
+        return;
+    }
+
+    $.ajax({
+        url:"/admin/manageUsers",
+        method:"POST",
+        data:{ key : val, id: id, day: day, start: 'старт', stop: '', 'month': month, year: year },
+        success : function() {
+            el.parentNode
+                .parentNode
+                .querySelector('.form-control')
+                .value = val
+        },
+        error: function (request, status, error) {
+            console.log(error);
+        }
+    });
+}
+
+function changeUsersTimeStop(el) {
+
+    var val = el.parentNode
+        .parentNode
+        .querySelector('.form-control')
+        .value;
+    var id = el.getAttribute('data-id');
+    var day = el.getAttribute('data-day');
+    var month = el.getAttribute('data-month');
+    var year = el.getAttribute('data-year');
+
+    if(val === '') {
+        return;
+    }
+
+    $.ajax({
+        url:"/admin/manageUsers",
+        method:"POST",
+        data:{ key : val, id: id, day: day, start: '', stop: 'стоп', 'month': month, year: year },
+        success : function() {
+            el.parentNode
+                .parentNode
+                .querySelector('.form-control')
+                .value = val
+        },
+        error: function (request, status, error) {
+            console.log(error);
+        }
+    });
 }

@@ -34,13 +34,6 @@ class SecurityPlugin extends Injectable
         $controller = $dispatcher->getControllerName();
         $action = $dispatcher->getActionName();
 
-        /* Debugbar start */
-        $ns = $dispatcher->getNamespaceName();
-        if ($ns=='Snowair\Debugbar\Controllers') {
-            return true;
-        }
-        /* Debugbar end */
-
         $acl = $this->getAcl();
 
         if (!$acl->isComponent($controller)) {
@@ -94,7 +87,15 @@ class SecurityPlugin extends Injectable
 
         //Private area resources
         $privateResources = [
-            'admin'    => ['index', 'register', 'registerSubmit', 'disableUser', 'usersManagement'],
+            'admin'    => [
+                'index',
+                'register',
+                'registerSubmit',
+                'disableUser',
+                'usersManagement',
+                'makeHoliday',
+                'userLatenessTime'
+            ],
         ];
 
         foreach ($privateResources as $resource => $actions) {

@@ -15,39 +15,55 @@
                 </thead>
 
                 <tbody>
-                <?php foreach ($usersTable as $day=>$val): ?>
+                    <?php foreach ($usersTable as $day=>$val): ?>
                     <tr>
                         <td scope="row"> <?php echo $day; ?></td>
 
                         <?php foreach($val as $userItem): ?>
+
                             <?php foreach ($users as $user): ?>
 
                                 <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
 
                                     <td>
-
                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control" placeholder="<?php echo $userItem['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
+                                            <input type="text" class="form-control"  value="<?php echo $userItem['start_time'] ?>" placeholder="<?php echo $userItem['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" onclick="changeUsersTime(this)" type="button" id="button-addon2">Старт</button>
+                                                <button class="btn btn-outline-secondary"
+                                                        data-day="<?php echo $userItem['day']?>"
+                                                        data-year="<?php echo $userItem['year']?>"
+                                                        data-id="<?php echo $userItem['id'] ?>"
+                                                        data-month="<?php echo $userItem['month'] ?>"
+                                                        onclick="changeUsersTime(this);"
+                                                        type="button"
+                                                        id="button-addon2">
+                                                    Старт
+                                                </button>
                                             </div>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" placeholder="<?php echo $userItem['end_time'] ?>" aria-label="end_time" aria-describedby="button-addon2">
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Стоп</button>
+                                                <button class="btn btn-outline-secondary"
+                                                        data-day="<?php echo $userItem['day']?>"
+                                                        data-year="<?php echo $userItem['year']?>"
+                                                        data-id="<?php echo $userItem['id'] ?>"
+                                                        data-month="<?php echo $userItem['month'] ?>"
+                                                        onclick="changeUsersTimeStop(this);"
+                                                        type="button"
+                                                        id="button-addon2">
+                                                    Стоп
+                                                </button>
                                             </div>
                                         </div>
-
                                     </td>
+
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endforeach; ?>
                     </tr>
-
-                <?php endforeach ?>
-
+                    <?php endforeach ?>
                 </tbody>
             </table>
         </div>

@@ -116,8 +116,22 @@ class AdminController extends \Phalcon\Mvc\Controller
         $request = new Request();
         $dates   = new DateDTO();
 
+        if ($request->isPost()) {
+            if($request->isAjax()) {
+                $adminService->editUserTime($request);
+            }
+        }
+
         $this->view->dayOfMonth = $dates->getDay();
         $this->view->usersTable = $adminService->getUserWorkDay();
         $this->view->users = $adminService->getUsers();
+    }
+
+    public function makeHolidayAction() {
+
+    }
+
+    public function userLatenessTimeAction() {
+
     }
 }
