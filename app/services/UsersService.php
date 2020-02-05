@@ -4,9 +4,11 @@ namespace Timetracker\Services;
 use Dates\DTO\DateDTO;
 use Phalcon\Di\Injectable;
 use Phalcon\Http\Request;
+use Phalcon\Http\Response;
 use Timetracker\Helper\Helpers;
 use Timetracker\Models\StartWorkHour;
 use Timetracker\Models\TimeDimension;
+use Timetracker\Models\UserLate;
 use Timetracker\Models\Users;
 use Timetracker\Models\UserWorkDay;
 
@@ -124,7 +126,6 @@ class UsersService extends Injectable
         return $total;
     }
 
-
     public function totalHourPerMonth() {
         $dates   = new DateDTO();
         $totalDays = array();
@@ -175,7 +176,7 @@ class UsersService extends Injectable
 
     public function userTimeSwitcherButton(Request $request) {
         try {
-
+            $response  = new Response();
             $key = $request->getPost('key');
             $day = $request->getPost('day');
             $month = $request->getPost('month');
@@ -213,22 +214,40 @@ class UsersService extends Injectable
             }
 
             if($request->getPost('start') == 'старт') {
-                $check = self::checkIfUserComeOnTime($key);
 
-                if(!$check) {
-                    $sql     = "INSERT INTO Timetracker\Models\UserLate(day, month, month_name, year, user_id) 
-                                VALUES (" . $day. ", " . $month. ", "")";
-                    $success = $connection->execute($sql);
-                }
+                $check = self::checkIfUserComeOnTime($key);
 
                 $workHour->start_time = $key;
                 $workHour->update();
-                return $workHour->start_time;
+
+                if($check == false) {
+
+                    $late = new UserLate();
+                    $late->setDay($day);
+                    $late->setMonth($month);
+                    $late->setYear($year);
+                    $late->setMonthName('null');
+                    $late->setUserId($this->session->get('AUTH_ID'));
+                    $late->create();
+
+                    print_r($late);
+                    exit('dd');
+                }
+
+                $response->setStatusCode(200);
+                $response->setJsonContent($workHour->start_time);
+                $response->send();
+                exit;
             }
 
             if($request->getPost('stop') == 'стоп') {
                 $workHour->end_time = $key;
                 $workHour->update();
+
+                $text = "OK";
+                $response->setStatusCode(200);
+                $response->setJsonContent($text);
+                $response->send();
                 exit;
             }
 

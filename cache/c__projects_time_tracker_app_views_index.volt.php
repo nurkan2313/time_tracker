@@ -29,5 +29,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <?= $this->tag->javascriptInclude('js/select2.min.js') ?>
 <?= $this->tag->javascriptInclude('js/main.js') ?>
+<?= $this->tag->javascriptInclude('js/boots-alert.js') ?>
+<?= $this->tag->javascriptInclude('js/set-holiday.js') ?>
+<?= $this->tag->javascriptInclude('js/user-table.js') ?>
+
 </body>
 </html>
