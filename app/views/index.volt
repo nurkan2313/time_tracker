@@ -32,6 +32,7 @@
 {{ javascript_include('js/boots-alert.js') }}
 {{ javascript_include('js/set-holiday.js') }}
 {{ javascript_include('js/user-table.js') }}
+{{ javascript_include('js/getDatesUserWorkTable.js') }}
 
 </body>
 </html>

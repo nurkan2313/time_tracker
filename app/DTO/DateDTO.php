@@ -9,6 +9,8 @@
 namespace Dates\DTO;
 
 
+use Timetracker\Models\TimeDimension;
+
 class DateDTO
 {
     private $year;
@@ -34,6 +36,26 @@ class DateDTO
     public function getDay() {
         $this->day = date('j');
         return $this->day;
+    }
+
+    public static function getYears () {
+        $yearArray = array();
+
+        $years = TimeDimension::find([
+            'conditions' => 'year between :from: and :to:',
+            'columns'    => 'distinct year',
+            'bind'       => [
+                'from' => 2020,
+                'to'   => 2029
+            ],
+            'order' => 'year ASC'
+        ]);
+
+        foreach ($years as $year) {
+            $yearArray[] = $year->year;
+        }
+
+        return $yearArray;
     }
 
 }

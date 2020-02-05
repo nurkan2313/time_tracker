@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Timetracker\Controllers;
 
+use App\Forms\UserGetDatesForWorkTableForm;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Http\Request;
@@ -19,6 +20,7 @@ use Timetracker\Services\UsersService;
 class UsersController extends ControllerBase
 {
     public $loginForm;
+    public $tableDateForm;
     public $user;
     public $timeDimension;
     public $userWorkDay;
@@ -30,6 +32,7 @@ class UsersController extends ControllerBase
     public function initialize()
     {
         $this->loginForm     = new LoginForm();
+        $this->tableDateForm = new UserGetDatesForWorkTableForm();
         $this->user          = new Users();
         $this->timeDimension = new TimeDimension();
         $this->userWorkDay   = new UserWorkDay();
@@ -128,13 +131,16 @@ class UsersController extends ControllerBase
             }
         }
 
+        $this->view->form      = $this->tableDateForm;
+        $this->view->tableYear  = $userService->selectYearInWorkTable();
         $this->view->dayOfMonth = $dates->getDay();
+        $this->view->monthTab   = $dates->getMonth();
         $this->view->userId    = $this->session->get('AUTH_ID');
         $this->view->users     = $userService->getUsers();
         $this->view->total     = $userService->calculateUserTotalHour();
         $this->view->totalHour = $userService->totalHourPerMonth();
         $this->view->assigned  = $userService->calculateAssignedHour();
-        $this->view->data      = $userService->getUserWorkDay();
+        $this->view->data      = $userService->getUserWorkDay($request);
     }
 
     /**

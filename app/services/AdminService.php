@@ -8,7 +8,6 @@
 
 namespace Timetracker\Services;
 
-
 use Dates\DTO\DateDTO;
 use Phalcon\Di\Injectable;
 use Phalcon\Http\Request;
@@ -197,23 +196,7 @@ class AdminService extends Injectable
     }
 
     public function getYears () {
-        $yearArray = array();
-
-        $years = TimeDimension::find([
-            'conditions' => 'year between :from: and :to:',
-            'columns'    => 'distinct year',
-            'bind'       => [
-                'from' => 2020,
-                'to'   => 2029
-            ],
-            'order' => 'year ASC'
-        ]);
-
-        foreach ($years as $year) {
-            array_push($yearArray, $year->year);
-        }
-
-        return $yearArray;
+       return DateDTO::getYears();
     }
 
     public function getMonthFromYear(Request $request) {

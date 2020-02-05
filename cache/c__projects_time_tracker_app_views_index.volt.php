@@ -32,6 +32,7 @@
 <?= $this->tag->javascriptInclude('js/boots-alert.js') ?>
 <?= $this->tag->javascriptInclude('js/set-holiday.js') ?>
 <?= $this->tag->javascriptInclude('js/user-table.js') ?>
+<?= $this->tag->javascriptInclude('js/getDatesUserWorkTable.js') ?>
 
 </body>
 </html>

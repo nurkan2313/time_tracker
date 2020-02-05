@@ -35,7 +35,7 @@
                             Welcome user: <?= $this->session->get('AUTH_NAME') ?>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
+                            <a class="dropdown-item" href="<?= $this->url->get('/user/worktable') ?>">Рабочая таблица</a>
                         </div>
 
                     </li>

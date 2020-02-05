@@ -1,7 +1,7 @@
 <?php
 
 //echo '<pre>';
-//print_r($total);
+//print_r($data);
 //echo '</pre>';
 ?>
 
@@ -18,6 +18,23 @@
                     <p>Ты опоздал: </p> 0 раз
                 </div>
             </div>
+
+            <?php echo $this->tag->form("/user/worktable"); ?>
+
+            <div class="form-group">
+                <?php echo $form->render('yearTable'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->render('monthTable'); ?>
+            </div>
+
+            <div class="form-group">
+                <?php echo $form->render('submit'); ?>
+            </div>
+
+            <input type='hidden' name='<?= $this->security->getTokenKey() ?>' value='<?= $this->security->getToken() ?>'/>
+            </form>
 
             <div class="table-responsive">
                 <table summary="This table shows how to create responsive tables using Bootstrap's default functionality" class="table table-bordered table-hover">
@@ -41,7 +58,7 @@
                                     <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
 
                                         <td>
-                                            <?php if( $userId == $userItem['id'] and $day == $dayOfMonth ): ?>
+                                            <?php if( $userId == $userItem['id'] and $day == $dayOfMonth and $monthTab == $userItem['month'] ): ?>
 
                                                 <?php if($userItem['start_time'] != null and $userItem['start_time'] != '' and $userItem['start_time'] != 0): ?>
                                                     <input type="button" class="btn btn-primary"
