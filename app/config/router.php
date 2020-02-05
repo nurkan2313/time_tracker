@@ -23,7 +23,4 @@ $router->add('/user/register/submit', ['controller' => 'admin', 'action' => 'reg
 $router->add('/admin/disableUser', ['controller' => 'admin', 'action' => 'disableUser']);
 $router->add('/admin/manageUsers', ['controller' => 'admin', 'action' => 'usersManagement']);
 $router->add('/admin/holiday', ['controller' => 'admin', 'action' => 'makeHoliday']);
-$router->add('/admin/lateness', ['controller' => 'admin', 'action' => 'userLatenessTime']);
-
-// 404
-$router->notFound(['controller' => 'index', 'action' => 'route404']);
+$router->add('/admin/setHour', ['controller' => 'admin', 'action' => 'startDayHour']);

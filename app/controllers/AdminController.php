@@ -14,6 +14,7 @@ class AdminController extends \Phalcon\Mvc\Controller
 {
     public $loginForm;
     public $usersModel;
+    public $adminService;
     public $deactivateForm;
     public $user;
 
@@ -23,6 +24,7 @@ class AdminController extends \Phalcon\Mvc\Controller
     {
         $this->usersModel = new Users();
         $this->deactivateForm = new DeactivateUserForm();
+        $this->adminService = new AdminService();
     }
 
     public function indexAction()
@@ -112,26 +114,34 @@ class AdminController extends \Phalcon\Mvc\Controller
     }
 
     public function usersManagementAction() {
-        $adminService = new AdminService();
+
         $request = new Request();
         $dates   = new DateDTO();
 
         if ($request->isPost()) {
             if($request->isAjax()) {
-                $adminService->editUserTime($request);
+                $this->adminService->editUserTime($request);
             }
         }
 
         $this->view->dayOfMonth = $dates->getDay();
-        $this->view->usersTable = $adminService->getUserWorkDay();
-        $this->view->users = $adminService->getUsers();
+        $this->view->usersTable =  $this->adminService->getUserWorkDay();
+        $this->view->users =  $this->adminService->getUsers();
     }
 
     public function makeHolidayAction() {
+        $request = new Request();
+        if ($request->isPost()) {
+            if($request->isAjax()) {
+                $this->adminService->getMonthFromYear($request);
+            }
+        }
 
+        $this->view->years = $this->adminService->getYears();
+        $this->view->currMonthHolidays =  $this->adminService->currentMonthHoliday();
     }
 
-    public function userLatenessTimeAction() {
+    public function startDayHourAction() {
 
     }
 }

@@ -94,7 +94,8 @@ class SecurityPlugin extends Injectable
                 'disableUser',
                 'usersManagement',
                 'makeHoliday',
-                'userLatenessTime'
+                'userLatenessTime',
+                'startDayHour'
             ],
         ];
 

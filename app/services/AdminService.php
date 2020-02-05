@@ -12,6 +12,7 @@ namespace Timetracker\Services;
 use Dates\DTO\DateDTO;
 use Phalcon\Di\Injectable;
 use Phalcon\Http\Request;
+use Phalcon\Http\Response;
 use Timetracker\Models\TimeDimension;
 use Timetracker\Models\Users;
 use Timetracker\Models\UserWorkDay;
@@ -126,8 +127,6 @@ class AdminService extends Injectable
             $year = $request->getPost('year');
             $user_id = $request->getPost('id');
 
-
-
             // get daytime id
             $getTimeDimensionId = TimeDimension::findFirst([
                 'conditions' => 'day = :day: AND month = :month: AND year = :year:',
@@ -172,7 +171,197 @@ class AdminService extends Injectable
             }
 
         } catch (\Exception $e) {
-            return $e->getMessage();
+            echo $e->getMessage();
         }
     }
+
+    public function currentMonthHoliday() {
+
+        $dates = new DateDTO();
+        $holidayArray = array();
+
+        $currentMonthHolidays = TimeDimension::find([
+            'conditions' => 'year = :year: and month = :month: and holiday_flag = :holiday:',
+            'bind'       => [
+                'year' => $dates->getYear(),
+                'month' => $dates->getMonth(),
+                'holiday' => 't'
+            ]
+        ]);
+
+        foreach ($currentMonthHolidays as $holiday) {
+            $holidayArray[$holiday->year][] = [
+                'month' => $holiday->month,
+                'day'   => $holiday->day
+            ];
+        }
+
+        return $holidayArray;
+    }
+
+    public function getYears () {
+        $yearArray = array();
+
+        $years = TimeDimension::find([
+            'conditions' => 'year between :from: and :to:',
+            'columns'    => 'distinct year',
+            'bind'       => [
+                'from' => 2020,
+                'to'   => 2029
+            ],
+            'order' => 'year ASC'
+        ]);
+
+        foreach ($years as $year) {
+            array_push($yearArray, $year->year);
+        }
+
+        return $yearArray;
+    }
+
+    public function getMonthFromYear(Request $request) {
+        $response  = new Response();
+        $year      = $request->getPost('year');
+        $month     = $request->getPost('month');
+        $workMonth = $request->getPost('work');
+        $updateDay = $request->getPost('updateDay');
+        $holiday_month = $request->getPost('holiday_month');
+
+        //Посмотреть нерабочие дни
+        if($year !== '' and $month == '') {
+            $monthArray = array();
+            $currentMonthHolidays = TimeDimension::find([
+                'conditions' => 'year = :year:',
+                'columns'    => 'distinct month_name',
+                'bind'       => [
+                    'year' => $year,
+                ],
+                'order' => 'month ASC'
+            ]);
+
+            foreach ($currentMonthHolidays as $holiday) {
+                array_push($monthArray, $holiday->month_name);
+            }
+
+
+            $response->setStatusCode(200);
+            $response->setJsonContent($monthArray);
+            $response->send();
+            exit;
+        }
+
+        if($year !== '' and $month !== '' and $workMonth == 'false') {
+
+            $daysArray = array();
+            $days = TimeDimension::find([
+                'conditions' => 'year = :year: and month_name = :month_name: and holiday_flag = :holiday_flag:',
+                'columns'    => 'day',
+                'bind'       => [
+                    'year' => $year,
+                    'month_name' => $month,
+                    'holiday_flag' => 't'
+                ],
+                'order' => 'day ASC'
+            ]);
+
+
+            foreach ($days as $holiday) {
+                array_push($daysArray, $holiday->day);
+            }
+
+            $response->setStatusCode(200);
+            $response->setJsonContent($daysArray);
+            $response->send();
+            exit;
+        }
+
+        //Создать нерабочие дни
+        if($year !== '' and $month == '' and $workMonth == 'true') {
+
+            $monthArray = array();
+            $days = TimeDimension::find([
+                'conditions' => 'year = :year:',
+                'columns'    => 'distinct month_name',
+                'bind'       => [
+                    'year' => $year,
+                ],
+                'order' => 'month ASC'
+            ]);
+
+            foreach ($days as $holiday) {
+                array_push($monthArray, $holiday->month_name);
+            }
+
+            $response->setStatusCode(200);
+            $response->setJsonContent($monthArray);
+            $response->send();
+            exit;
+        }
+
+        if($year !== '' and $month !== '' and $workMonth == 'true') {
+
+            $workDays = array();
+            $days = TimeDimension::find([
+                'conditions' => 'year = :year: and month_name = :month_name: and holiday_flag = :holiday_flag: and weekend_flag = :weekend_flag:',
+                'columns'    => 'day',
+                'bind'       => [
+                    'year' => $year,
+                    'month_name' => $month,
+                    'holiday_flag' => 'f',
+                    'weekend_flag' => 'f'
+                ],
+                'order' => 'day ASC'
+            ]);
+
+
+            foreach ($days as $holiday) {
+                array_push($workDays, $holiday->day);
+            }
+
+
+            $response->setStatusCode(200);
+            $response->setJsonContent($workDays);
+            $response->send();
+            exit;
+        }
+
+        if($year == '' and $month == '' and $workMonth == 'false') {
+
+            foreach ($updateDay as $day) {
+               $this->modelsManager->createQuery("UPDATE Timetracker\Models\TimeDimension SET holiday_flag = 't' WHERE day = ".$day." and month_name = '" .$holiday_month. "' ")->execute();
+            }
+
+            $test = 'OK';
+            $response->setStatusCode(200);
+            $response->setJsonContent($test);
+            $response->send();
+            exit;
+        }
+    }
+
+    public function selectHolidayFromMonth(Request $request) {
+
+        $month = $request->getPost('month');
+        $year = $request->getPost('year');
+
+        $holidayArray = array();
+
+        $currentMonthHolidays = TimeDimension::find([
+            'conditions' => 'year = :year: and month = :month: and holiday_flag = :holiday:',
+            'bind'       => [
+                'year' => $year,
+                'month' => $month,
+                'holiday' => 't'
+            ]
+        ]);
+
+        foreach ($currentMonthHolidays as $holiday) {
+            $holidayArray[$holiday->year][] = [
+                'day'   => $holiday->month
+            ];
+        }
+
+        return $holidayArray;
+    }
+
 }

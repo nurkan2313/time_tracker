@@ -1,0 +1,91 @@
+<h1 class="text-center">Holiday action</h1>
+
+<div class="col-12">
+    <div class="row">
+
+        <div class="col-6 card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Посмотреть нерабочие дни: </h5>
+                <h6 class="card-subtitle mb-2 text-muted">Выберите действия</h6>
+
+                <div class="col-12">
+                    <div class="row">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Выбрать год</label>
+                                <select class="form-control" id="exampleFormControlSelect1">
+                                    <option selected disabled>Choose here</option>
+                                    <?php foreach ($years as $year):?>
+                                        <option> <?php echo $year ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="row">
+                        <div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="showMonth">Выбрать месяц</label>
+                                    <select class="form-control" id="showMonth">
+                                        <option selected disabled>месяц</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="row">
+                        <div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="showMonth">Нерабочие дни:</label>
+                                    <ul class="list-group" id="days">
+
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6 card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Создать нерабочие дни</h5>
+                <h6 class="card-subtitle mb-2 text-muted">введите день, месяц и год ниже</h6>
+                <form>
+                    <div class="form-group">
+                        <label for="yearChooseForChange">Год</label>
+                        <select class="form-control" id="yearChooseForChange">
+                            <option selected disabled>Choose here</option>
+                            <?php foreach ($years as $year):?>
+                                <option> <?php echo $year ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="month">Мясяц</label>
+                        <select class="form-control" id="month">
+                            <option selected disabled>месяц</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="showMonth">рабочие дни:</label>
+                        <ul class="list-group" id="setDayoff"></ul>
+                    </div>
+                    <input type="button" id="getSelected" onclick="getAllSelected();" value="назначить" class="btn btn-primary" >
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
