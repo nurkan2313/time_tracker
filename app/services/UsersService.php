@@ -5,6 +5,7 @@ use Dates\DTO\DateDTO;
 use Phalcon\Di\Injectable;
 use Phalcon\Http\Request;
 use Timetracker\Helper\Helpers;
+use Timetracker\Models\StartWorkHour;
 use Timetracker\Models\TimeDimension;
 use Timetracker\Models\Users;
 use Timetracker\Models\UserWorkDay;
@@ -123,6 +124,7 @@ class UsersService extends Injectable
         return $total;
     }
 
+
     public function totalHourPerMonth() {
         $dates   = new DateDTO();
         $totalDays = array();
@@ -151,7 +153,7 @@ class UsersService extends Injectable
 
         if($userHours > 0) {
             $this->percentResult = $userHours / $hundredPercent  * 100 / 100;
-            return round($this->percentResult);
+            return round($this->percentResult * 100, 2);
         } else {
             return $this->percentResult = 0;
         }
@@ -211,6 +213,14 @@ class UsersService extends Injectable
             }
 
             if($request->getPost('start') == 'старт') {
+                $check = self::checkIfUserComeOnTime($key);
+
+                if(!$check) {
+                    $sql     = "INSERT INTO Timetracker\Models\UserLate(day, month, month_name, year, user_id) 
+                                VALUES (" . $day. ", " . $month. ", "")";
+                    $success = $connection->execute($sql);
+                }
+
                 $workHour->start_time = $key;
                 $workHour->update();
                 return $workHour->start_time;
@@ -219,11 +229,20 @@ class UsersService extends Injectable
             if($request->getPost('stop') == 'стоп') {
                 $workHour->end_time = $key;
                 $workHour->update();
-                return;
+                exit;
             }
 
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    private static function checkIfUserComeOnTime($start_time) {
+
+        $getTime = StartWorkHour::findFirst(1);
+        if($start_time > $getTime->getTime()) {
+            return false;
+        }
+        return true;
     }
 }

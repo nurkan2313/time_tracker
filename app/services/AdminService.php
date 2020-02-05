@@ -158,13 +158,13 @@ class AdminService extends Injectable
             if($request->getPost('start') == 'старт') {
                 $workHour->start_time = $key;
                 $workHour->update();
-                return;
+                exit;
             }
 
             if($request->getPost('stop') == 'стоп') {
                 $workHour->end_time = $key;
                 $workHour->update();
-                return;
+                exit;
             }
 
         } catch (\Exception $e) {

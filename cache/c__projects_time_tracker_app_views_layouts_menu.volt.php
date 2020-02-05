@@ -14,6 +14,33 @@
                         <a class="nav-link" href="<?= $this->url->get('/user/login') ?>">Логин</a>
                     <?php } ?>
                 </li>
+
+                <?php if ($this->session->get('AUTH') == 'admin') { ?>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       Welcome admin: <?= $this->session->get('AUTH_NAME') ?>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="<?= $this->url->get('/user/register') ?>">Зарегать пользователя</a>
+                        <a class="dropdown-item" href="<?= $this->url->get('/admin/disableUser') ?>">Забанить пользователя</a>
+                        <a class="dropdown-item" href="<?= $this->url->get('/admin/manageUsers') ?>">Редактировать время пользователей</a>
+                        <a class="dropdown-item" href="<?= $this->url->get('/admin/setHour') ?>">Назначить время начала рабочего дня</a>
+                    </div>
+
+                </li>
+                <?php } elseif ($this->session->get('AUTH') == 'users') { ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Welcome user: <?= $this->session->get('AUTH_NAME') ?>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        </div>
+
+                    </li>
+                <?php } ?>
+
             </ul>
         </div>
     </div>

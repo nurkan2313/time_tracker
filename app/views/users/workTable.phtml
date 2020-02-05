@@ -13,7 +13,7 @@
                 <div class="container">
                     <h1 class="display-4">My Hours Log</h1>
                     <p>You have: <?php echo $total; ?></p>
-                    <p>You have/Assigned: <?php echo $assigned; ?></p>
+                    <p>You have/Assigned: <?php echo $assigned; ?> %</p>
                     <p>Assigned: <?php echo $totalHour; ?></p>
                     <p>Ты опоздал: </p> 0 раз
                 </div>
@@ -60,17 +60,17 @@
                                                 <?php endif; ?>
 
                                                 <div id="startTime">
-                                                    <?php echo $userItem['start_time']; ?>
+                                                    <?php echo round($userItem['start_time'], 2); ?>
                                                 </div> -
                                                 <div id="endTime">
-                                                    <?php echo $userItem['end_time']; ?>
+                                                    <?php echo round($userItem['end_time'], 2); ?>
                                                 </div>
                                             <?php else: ?>
                                                 <div id="startTimeOtherDay">
-                                                    <?php echo $userItem['start_time']; ?>
+                                                    <?php echo round($userItem['start_time'], 2); ?>
                                                 </div> -
                                                 <div id="endTimeOtherDay">
-                                                    <?php echo $userItem['end_time']; ?>
+                                                    <?php echo round($userItem['end_time'], 2); ?>
                                                 </div>
                                             <?php endif ?>
                                         </td>

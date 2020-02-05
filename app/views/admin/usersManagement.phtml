@@ -27,7 +27,7 @@
 
                                     <td>
                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control"  value="<?php echo $userItem['start_time'] ?>" placeholder="<?php echo $userItem['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
+                                            <input type="text" class="form-control"  value="<?php echo round($userItem['start_time'], 2) ?>" placeholder="<?php echo $userItem['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary"
                                                         data-day="<?php echo $userItem['day']?>"
@@ -43,7 +43,7 @@
                                         </div>
 
                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control" placeholder="<?php echo $userItem['end_time'] ?>" aria-label="end_time" aria-describedby="button-addon2">
+                                            <input type="text" class="form-control" placeholder="<?php echo round($userItem['end_time'], 2) ?>" aria-label="end_time" aria-describedby="button-addon2">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary"
                                                         data-day="<?php echo $userItem['day']?>"

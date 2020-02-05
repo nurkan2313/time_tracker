@@ -14,6 +14,33 @@
                         <a class="nav-link" href="{{ url('/user/login') }}">Логин</a>
                     {% endif %}
                 </li>
+
+                {% if session.get('AUTH') == 'admin' %}
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       Welcome admin: {{ session.get('AUTH_NAME') }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ url('/user/register') }}">Зарегать пользователя</a>
+                        <a class="dropdown-item" href="{{ url('/admin/disableUser') }}">Забанить пользователя</a>
+                        <a class="dropdown-item" href="{{ url('/admin/manageUsers') }}">Редактировать время пользователей</a>
+                        <a class="dropdown-item" href="{{ url('/admin/setHour') }}">Назначить время начала рабочего дня</a>
+                    </div>
+
+                </li>
+                {% elseif session.get('AUTH') == 'users' %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Welcome user: {{ session.get('AUTH_NAME') }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        </div>
+
+                    </li>
+                {% endif %}
+
             </ul>
         </div>
     </div>

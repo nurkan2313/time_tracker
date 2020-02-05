@@ -29,5 +29,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 {{ javascript_include('js/select2.min.js') }}
 {{ javascript_include('js/main.js') }}
+{{ javascript_include('js/boots-alert.js') }}
+{{ javascript_include('js/set-holiday.js') }}
+{{ javascript_include('js/user-table.js') }}
+
 </body>
 </html>
