@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Timetracker\Controllers;
 
+use App\Forms\AdminGetDatesTableForm;
 use App\Forms\DeactivateUserForm;
 use App\Forms\RegisterForm;
 use App\Forms\StartHourForm;
@@ -14,6 +15,7 @@ use Timetracker\Services\AdminService;
 class AdminController extends \Phalcon\Mvc\Controller
 {
     public $loginForm;
+    public $tableForm;
     public $usersModel;
     public $adminService;
     public $deactivateForm;
@@ -28,6 +30,7 @@ class AdminController extends \Phalcon\Mvc\Controller
         $this->deactivateForm = new DeactivateUserForm();
         $this->adminService = new AdminService();
         $this->adminSetHourForm =  new StartHourForm();
+        $this->tableForm =  new AdminGetDatesTableForm();
     }
 
     public function indexAction()
@@ -128,8 +131,9 @@ class AdminController extends \Phalcon\Mvc\Controller
         }
 
         $this->view->dayOfMonth = $dates->getDay();
-        $this->view->usersTable =  $this->adminService->getUserWorkDay();
+        $this->view->usersTable =  $this->adminService->getUserWorkDay($request);
         $this->view->users =  $this->adminService->getUsers();
+        $this->view->form = $this->tableForm;
     }
 
     public function makeHolidayAction() {

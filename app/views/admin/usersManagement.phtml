@@ -1,71 +1,87 @@
 
-<div class="container">
+<?php echo $this->tag->form("/admin/manageUsers"); ?>
+
+<div class="form-group">
+    <?php echo $form->render('yearTable'); ?>
+</div>
+
+<div class="form-group">
+    <?php echo $form->render('monthTable'); ?>
+</div>
+
+<div class="form-group">
+    <?php echo $form->render('submit'); ?>
+</div>
+
+<input type='hidden' name='<?= $this->security->getTokenKey() ?>' value='<?= $this->security->getToken() ?>'/>
+</form>
+
+
+<div class="col-12 ">
     <div class="row">
-        <div class="col-12">
-            <h1>admin page</h1>
-            <br>
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">день</th>
+        <h1>admin page</h1>
+        <br>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">день</th>
+                    <?php foreach ($users as $user): ?>
+                        <th scope="col"><?php echo $user->name; ?></th>
+                    <?php endforeach; ?>
+                </tr>
+            </thead>
+
+            <tbody>
+                <?php foreach ($usersTable as $day=>$val): ?>
+                <tr>
+                    <td scope="row"> <?php echo $day; ?></td>
+
+                    <?php foreach($val as $userItem): ?>
+
                         <?php foreach ($users as $user): ?>
-                            <th scope="col"><?php echo $user->name; ?></th>
-                        <?php endforeach; ?>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    <?php foreach ($usersTable as $day=>$val): ?>
-                    <tr>
-                        <td scope="row"> <?php echo $day; ?></td>
+                            <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
 
-                        <?php foreach($val as $userItem): ?>
-
-                            <?php foreach ($users as $user): ?>
-
-                                <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
-
-                                    <td>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control"  value="<?php echo round($userItem['start_time'], 2) ?>" placeholder="<?php echo $userItem['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary"
-                                                        data-day="<?php echo $userItem['day']?>"
-                                                        data-year="<?php echo $userItem['year']?>"
-                                                        data-id="<?php echo $userItem['id'] ?>"
-                                                        data-month="<?php echo $userItem['month'] ?>"
-                                                        onclick="changeUsersTime(this);"
-                                                        type="button"
-                                                        id="button-addon2">
-                                                    Старт
-                                                </button>
-                                            </div>
+                                <td>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control"  value="<?php echo round($userItem['start_time'], 2) ?>" placeholder="<?php echo $userItem['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary"
+                                                    data-day="<?php echo $userItem['day']?>"
+                                                    data-year="<?php echo $userItem['year']?>"
+                                                    data-id="<?php echo $userItem['id'] ?>"
+                                                    data-month="<?php echo $userItem['month'] ?>"
+                                                    onclick="changeUsersTime(this);"
+                                                    type="button"
+                                                    id="button-addon2">
+                                                Старт
+                                            </button>
                                         </div>
+                                    </div>
 
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" placeholder="<?php echo round($userItem['end_time'], 2) ?>" aria-label="end_time" aria-describedby="button-addon2">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary"
-                                                        data-day="<?php echo $userItem['day']?>"
-                                                        data-year="<?php echo $userItem['year']?>"
-                                                        data-id="<?php echo $userItem['id'] ?>"
-                                                        data-month="<?php echo $userItem['month'] ?>"
-                                                        onclick="changeUsersTimeStop(this);"
-                                                        type="button"
-                                                        id="button-addon2">
-                                                    Стоп
-                                                </button>
-                                            </div>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="<?php echo round($userItem['end_time'], 2) ?>" aria-label="end_time" aria-describedby="button-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary"
+                                                    data-day="<?php echo $userItem['day']?>"
+                                                    data-year="<?php echo $userItem['year']?>"
+                                                    data-id="<?php echo $userItem['id'] ?>"
+                                                    data-month="<?php echo $userItem['month'] ?>"
+                                                    onclick="changeUsersTimeStop(this);"
+                                                    type="button"
+                                                    id="button-addon2">
+                                                Стоп
+                                            </button>
                                         </div>
-                                    </td>
+                                    </div>
+                                </td>
 
-                                <?php endif; ?>
-                            <?php endforeach; ?>
+                            <?php endif; ?>
                         <?php endforeach; ?>
-                    </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
-        </div>
+                    <?php endforeach; ?>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
     </div>
 </div>

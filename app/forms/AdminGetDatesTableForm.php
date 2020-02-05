@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: user
  * Date: 05.02.2020
- * Time: 15:47
+ * Time: 17:54
  */
 
 namespace App\Forms;
@@ -13,11 +13,11 @@ use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Form;
 
-class UserGetDatesForWorkTableForm extends Form
+
+class AdminGetDatesTableForm extends Form
 {
     public function initialize()
     {
-
         $month = range(1, 12);
 
         $years = DateDTO::getYears();
@@ -49,5 +49,4 @@ class UserGetDatesForWorkTableForm extends Form
         $this->add($chosenMonth);
         $this->add($submit);
     }
-
 }

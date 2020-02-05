@@ -21,29 +21,44 @@ class AdminService extends Injectable
 {
     public $timeDimension;
     public $users;
+    public $calendar;
 
     public function initialize()
     {
         $this->timeDimension = new TimeDimension();
         $this->users = new Users();
+        $this->calendar = new TimeDimension();
     }
 
-    public function getUserWorkDay(): array {
+    public function getUserWorkDay(Request $request): array {
 
         $dates      = new DateDTO();
         $daysArray  = array();
         $usersArray = array();
 
         try {
-            $calendar = TimeDimension::find( [
-                'conditions' => 'year = :year: and month = :month:',
-                'bind'       => [
-                    'year' => $dates->getYear(),
-                    'month' => $dates->getMonth(),
-                ]
-            ]);
+            if($request->isPost()) {
+                $year = $this->request->getPost('yearTable');
+                $month = $this->request->getPost('monthTable');
 
-            foreach ($calendar as $cal )
+                $this->calendar = TimeDimension::find([
+                    'conditions' => 'year = :year: and month = :month:',
+                    'bind' => [
+                        'year' => $year,
+                        'month' => $month,
+                    ]
+                ]);
+            } else {
+                $this->calendar = TimeDimension::find([
+                    'conditions' => 'year = :year: and month = :month:',
+                    'bind' => [
+                        'year' => $dates->getYear(),
+                        'month' => $dates->getMonth(),
+                    ]
+                ]);
+            }
+
+            foreach ($this->calendar as $cal )
             {
                 $daysArray[] = [
                     'day' => $cal->day,
