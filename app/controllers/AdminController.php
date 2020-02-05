@@ -5,6 +5,7 @@ namespace Timetracker\Controllers;
 
 use App\Forms\DeactivateUserForm;
 use App\Forms\RegisterForm;
+use App\Forms\StartHourForm;
 use Dates\DTO\DateDTO;
 use Timetracker\Models\Users;
 use Phalcon\Http\Request;
@@ -16,6 +17,7 @@ class AdminController extends \Phalcon\Mvc\Controller
     public $usersModel;
     public $adminService;
     public $deactivateForm;
+    public $adminSetHourForm;
     public $user;
 
     public function onConstruct() {}
@@ -25,6 +27,7 @@ class AdminController extends \Phalcon\Mvc\Controller
         $this->usersModel = new Users();
         $this->deactivateForm = new DeactivateUserForm();
         $this->adminService = new AdminService();
+        $this->adminSetHourForm =  new StartHourForm();
     }
 
     public function indexAction()
@@ -142,6 +145,15 @@ class AdminController extends \Phalcon\Mvc\Controller
     }
 
     public function startDayHourAction() {
+
+        $request = new Request();
+        $time    = $this->request->getPost('time');
+
+        if ($request->isPost()) {
+            $this->adminService->makeStartWorkHourDay($time);
+        }
+
+        $this->view->form = new StartHourForm();
 
     }
 }

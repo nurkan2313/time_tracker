@@ -13,6 +13,7 @@ use Dates\DTO\DateDTO;
 use Phalcon\Di\Injectable;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use Timetracker\Models\StartWorkHour;
 use Timetracker\Models\TimeDimension;
 use Timetracker\Models\Users;
 use Timetracker\Models\UserWorkDay;
@@ -114,10 +115,6 @@ class AdminService extends Injectable
         return $data;
     }
 
-    /**
-     * @param Request $request
-     * @return float|mixed|string|void
-     */
     public function editUserTime(Request $request) {
         try {
 
@@ -364,4 +361,9 @@ class AdminService extends Injectable
         return $holidayArray;
     }
 
+    public function makeStartWorkHourDay($time) {
+        $findTime = StartWorkHour::findFirst(1);
+        $findTime->setTime($time);
+        $findTime->save();
+    }
 }
