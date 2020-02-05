@@ -17,6 +17,7 @@ class UsersService extends Injectable
     public $timeDimension;
     public $percentResult;
     public $users;
+    public $calendar;
 
     private static function checkIfUserComeOnTime($start_time) {
 
@@ -31,6 +32,7 @@ class UsersService extends Injectable
     {
         $this->timeDimension = new TimeDimension();
         $this->users = new Users();
+        $this->calendar = new TimeDimension();
     }
 
     public function getUserWorkDay(Request $request): array {
@@ -45,7 +47,7 @@ class UsersService extends Injectable
                 $year  = $this->request->getPost('yearTable');
                 $month = $this->request->getPost('monthTable');
 
-                $calendar = TimeDimension::find( [
+                $this->calendar = TimeDimension::find( [
                     'conditions' => 'year = :year: and month = :month:',
                     'bind'       => [
                         'year' => $year,
@@ -53,64 +55,9 @@ class UsersService extends Injectable
                     ]
                 ]);
 
-                foreach ($calendar as $cal )
-                {
-                    $daysArray[] = [
-                        'day' => $cal->day,
-                        'month' => $cal->month,
-                        'year' => $cal->year
-                    ];
-
-                }
-
-                $users =  Users::find();
-
-                foreach ($users as $user) {
-                    array_push($usersArray, $user->getId());
-                }
-
-                $res = array();
-
-                foreach ($daysArray as $day) {
-                    foreach ($usersArray as $usr) {
-
-                        $query = $this->modelsManager->createQuery("
-                          SELECT DISTINCT 
-                          IFNULL( (SELECT Timetracker\Models\UserWorkDay.start_time
-                                       FROM Timetracker\Models\UserWorkDay
-                                       WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
-                                       and Timetracker\Models\UserWorkDay.day = ".$day['day']." 
-                                       and Timetracker\Models\UserWorkDay.month = ".$day['month']."
-                                       and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as start_time,
-                          IFNULL( (SELECT Timetracker\Models\UserWorkDay.end_time  
-                                       FROM Timetracker\Models\UserWorkDay 
-                                       WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
-                                        and Timetracker\Models\UserWorkDay.day = " .$day['day'] ."
-                                        and Timetracker\Models\UserWorkDay.month = ".$day['month']."
-                                        and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as end_time,
-                          IFNULL( (SELECT  Timetracker\Models\Users.name 
-                                    FROM Timetracker\Models\Users
-                                    WHERE Timetracker\Models\Users.id =  ".$usr." ),0) as name
-                          FROM Timetracker\Models\UserWorkDay ")
-                            ->execute();
-                        foreach ($query as $item) {
-                            $res[$day['day']][] = [
-                                'name' => $item->name,
-                                'start_time' => $item->start_time,
-                                'end_time' => $item->end_time,
-                                'month' => $day['month'],
-                                'id' => $usr
-                            ];
-                        }
-                    }
-                }
-
-                return $res;
-
-
 
             } else {
-                $calendar = TimeDimension::find( [
+                $this->calendar = TimeDimension::find( [
                     'conditions' => 'year = :year: and month = :month:',
                     'bind'       => [
                         'year' => $dates->getYear(),
@@ -118,28 +65,30 @@ class UsersService extends Injectable
                     ]
                 ]);
 
-                foreach ($calendar as $cal )
-                {
-                    $daysArray[] = [
-                        'day' => $cal->day,
-                        'month' => $cal->month,
-                        'year' => $cal->year
-                    ];
+            }
 
-                }
+            foreach ($this->calendar as $cal )
+            {
+                $daysArray[] = [
+                    'day' => $cal->day,
+                    'month' => $cal->month,
+                    'year' => $cal->year
+                ];
 
-                $users =  Users::find();
+            }
 
-                foreach ($users as $user) {
-                    array_push($usersArray, $user->getId());
-                }
+            $users =  Users::find();
 
-                $res = array();
+            foreach ($users as $user) {
+                array_push($usersArray, $user->getId());
+            }
 
-                foreach ($daysArray as $day) {
-                    foreach ($usersArray as $usr) {
+            $res = array();
 
-                        $query = $this->modelsManager->createQuery("
+            foreach ($daysArray as $day) {
+                foreach ($usersArray as $usr) {
+
+                    $query = $this->modelsManager->createQuery("
                           SELECT DISTINCT 
                           IFNULL( (SELECT Timetracker\Models\UserWorkDay.start_time
                                        FROM Timetracker\Models\UserWorkDay
@@ -157,23 +106,20 @@ class UsersService extends Injectable
                                     FROM Timetracker\Models\Users
                                     WHERE Timetracker\Models\Users.id =  ".$usr." ),0) as name
                           FROM Timetracker\Models\UserWorkDay ")
-                            ->execute();
-                        foreach ($query as $item) {
-                            $res[$day['day']][] = [
-                                'name' => $item->name,
-                                'start_time' => $item->start_time,
-                                'end_time' => $item->end_time,
-                                'month' => $day['month'],
-                                'id' => $usr
-                            ];
-                        }
+                        ->execute();
+                    foreach ($query as $item) {
+                        $res[$day['day']][] = [
+                            'name' => $item->name,
+                            'start_time' => $item->start_time,
+                            'end_time' => $item->end_time,
+                            'month' => $day['month'],
+                            'id' => $usr
+                        ];
                     }
                 }
-
-                return $res;
             }
 
-
+            return $res;
 
         } catch (\Exception $e){
             print_r($e->getMessage());

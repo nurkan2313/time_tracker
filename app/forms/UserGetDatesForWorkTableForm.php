@@ -25,7 +25,6 @@ class UserGetDatesForWorkTableForm extends Form
         $res = array_combine ($years, $years);
         $monthRes = array_combine($month, $month);
 
-
         $chosenYear = new Select('yearTable', $res, [
             'using' =>  ['id', 'year'],
             'useEmpty'   => true,
