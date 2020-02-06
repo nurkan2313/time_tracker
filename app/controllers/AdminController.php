@@ -6,6 +6,7 @@ namespace Timetracker\Controllers;
 use App\Forms\AdminGetDatesTableForm;
 use App\Forms\DeactivateUserForm;
 use App\Forms\RegisterForm;
+use App\Forms\RemoveFromLateForm;
 use App\Forms\StartHourForm;
 use Dates\DTO\DateDTO;
 use Timetracker\Models\Users;
@@ -20,6 +21,7 @@ class AdminController extends \Phalcon\Mvc\Controller
     public $adminService;
     public $deactivateForm;
     public $adminSetHourForm;
+    public $removeForm;
     public $user;
 
     public function onConstruct() {}
@@ -31,6 +33,7 @@ class AdminController extends \Phalcon\Mvc\Controller
         $this->adminService = new AdminService();
         $this->adminSetHourForm =  new StartHourForm();
         $this->tableForm =  new AdminGetDatesTableForm();
+        $this->removeForm = new RemoveFromLateForm();
     }
 
     public function indexAction()
@@ -162,6 +165,13 @@ class AdminController extends \Phalcon\Mvc\Controller
     }
 
     public function listOfLateUsersAction() {
+
+        $request = new Request();
+        if($request->isPost()) {
+            $this->adminService->removeFromLate($request);
+        }
+
+        $this->view->form = $this->removeForm;
         $this->view->list = $this->adminService->listOfLateUsers();
     }
 }

@@ -367,58 +367,42 @@ class AdminService extends Injectable
     }
 
     public function listOfLateUsers() {
-        $usersArray = array();
-        $queryBuilder = $this->modelsManager->createBuilder();
+        try {
+            $usersArray = array();
+            $queryBuilder = UserLate::query()
+                ->columns('
+                            Timetracker\Models\UserLate.id as table_id,
+                            Timetracker\Models\Users.name as name,
+                            Timetracker\Models\UserLate.day as day,
+                            Timetracker\Models\UserLate.month as month,
+                            Timetracker\Models\UserLate.year as year,
+                            Timetracker\Models\UserLate.user_id as user_id')
+                ->innerJoin('Timetracker\Models\Users', 'Timetracker\Models\UserLate.user_id = Timetracker\Models\Users.id')
+                ->execute();
 
-        $queryBuilder->columns('Timetracker\Models\UserLate.id as id,
-                                Timetracker\Models\UserLate.day as day,
-                                Timetracker\Models\UserLate.month as month,
-                                Timetracker\Models\UserLate.user_id as user_id,
-                                Timetracker\Models\UserLate.year as year,
-                                u.name')
-                        ->from('Timetracker\Models\UserLate')
-                        ->innerJoin('Timetracker\Models\Users', 'u.id = Timetracker\Models\UserLate.user_id', 'u')
-                        ->orderBy('Timetracker\Models\UserLate.id')
-                        ->getQuery()
-                        ->execute();
-        print_r($queryBuilder);
-        die();
-//
-//        foreach ($queryBuilder as $found) {
-//            $usersArray[] = [
-//                'id' => $found->getId(),
-//                'day' => $found->getDay(),
-//                'month' => $found->getMonth(),
-//                'year' => $found->getYear(),
-//                'user_id' => $found->getUserId(),
-//                'user_name' => $found->name
-//            ];
-//        }
-//        return
+            foreach ($queryBuilder as $builder) {
+                $usersArray[] = [
+                    'name' => $builder->name,
+                    'table_id' => $builder->table_id,
+                    'day' => $builder->day,
+                    'month'=> $builder->month,
+                    'year'=> $builder->year
+                ];
+            }
+            return $usersArray;
+
+        } catch (\Exception $e) {
+             $e->getMessage();
+        }
     }
 
-    public function removeFromLate($id)
+    public function removeFromLate(Request $request)
     {
+        $id = $request->getPost('table_id');
         $user_late = UserLate::findFirst($id);
+        $user_late->delete();
 
-        if (!$user_late->delete()) {
+        $this->flash->success("user late was deleted successfully");
 
-            foreach ($user_late->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            $this->dispatcher->forward([
-                'controller' => "user_late",
-                'action' => 'search'
-            ]);
-            return;
-        }
-
-        $this->flash->success("user_late was deleted successfully");
-
-        $this->dispatcher->forward([
-            'controller' => "user_late",
-            'action' => "index"
-        ]);
     }
 }

@@ -14,11 +14,11 @@ class LoginForm extends Form
 {
     public function initialize()
     {
-        /**
-         * Email Address
-         */
-        $email = new Text('email', [
-            "class" => "form-control",
+             /**
+              * Email Address
+              */
+             $email = new Text('email', [
+                 "class" => "form-control",
             // "required" => true,
             "placeholder" => "Email Address"
         ]);

@@ -27,6 +27,7 @@
                         <a class="dropdown-item" href="<?= $this->url->get('/admin/manageUsers') ?>">Редактировать время пользователей</a>
                         <a class="dropdown-item" href="<?= $this->url->get('/admin/setHour') ?>">Назначить время начала рабочего дня</a>
                         <a class="dropdown-item" href="<?= $this->url->get('/admin/holiday') ?>">Создать выходные дни</a>
+                        <a class="dropdown-item" href="<?= $this->url->get('/admin/listLate') ?>">Посмотреть всех опоздавших</a>
                     </div>
 
                 </li>
@@ -38,7 +39,6 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="<?= $this->url->get('/user/worktable') ?>">Рабочая таблица</a>
                         </div>
-
                     </li>
                 <?php } ?>
 
