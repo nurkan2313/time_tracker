@@ -18,6 +18,13 @@ class UsersService extends Injectable
     public $users;
     public $calendar;
 
+    public function initialize()
+    {
+        $this->timeDimension = new TimeDimension();
+        $this->users = new Users();
+        $this->calendar = new TimeDimension();
+    }
+
     private static function checkIfUserComeOnTime($start_time) {
 
         $getTime = StartWorkHour::findFirst(1);
@@ -25,13 +32,6 @@ class UsersService extends Injectable
             return false;
         }
         return true;
-    }
-
-    public function initialize()
-    {
-        $this->timeDimension = new TimeDimension();
-        $this->users = new Users();
-        $this->calendar = new TimeDimension();
     }
 
     public function getUserWorkDay(Request $request): array {
@@ -53,7 +53,6 @@ class UsersService extends Injectable
                         'month' => $month,
                     ]
                 ]);
-
 
             } else {
                 $this->calendar = TimeDimension::find( [
@@ -254,9 +253,8 @@ class UsersService extends Injectable
                 $workHour->end_time = $key;
                 $workHour->update();
 
-                $text = "OK";
                 $response->setStatusCode(200);
-                $response->setJsonContent($text);
+                $response->setJsonContent($workHour->end_time);
                 $response->send();
                 exit;
             }
