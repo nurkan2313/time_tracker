@@ -131,22 +131,19 @@ class UsersController extends ControllerBase
             }
         }
 
-        $this->view->lates     = $userService->calculateUserLate();
-        $this->view->form      = $this->tableDateForm;
+        $this->view->lates      = $userService->calculateUserLate();
+        $this->view->form       = $this->tableDateForm;
         $this->view->tableYear  = $userService->selectYearInWorkTable();
         $this->view->dayOfMonth = $dates->getDay();
         $this->view->monthTab   = $dates->getMonth();
-        $this->view->userId    = $this->session->get('AUTH_ID');
-        $this->view->users     = $userService->getUsers();
-        $this->view->total     = $userService->calculateUserTotalHour();
-        $this->view->totalHour = $userService->totalHourPerMonth();
-        $this->view->assigned  = $userService->calculateAssignedHour();
-        $this->view->data      = $userService->getUserWorkDay($request);
+        $this->view->userId     = $this->session->get('AUTH_ID');
+        $this->view->users      = $userService->getUsers();
+        $this->view->total      = $userService->calculateUserTotalHour();
+        $this->view->totalHour  = $userService->totalHourPerMonth();
+        $this->view->assigned   = $userService->calculateAssignedHour();
+        $this->view->data       = $userService->getUserWorkDay($request);
     }
 
-    /**
-     * User Logout
-     */
     public function logoutAction()
     {
         # https://docs.phalconphp.com/en/3.3/session#remove-destroy
@@ -233,11 +230,11 @@ class UsersController extends ControllerBase
         }
 
         $user = new Users();
-        $user->name = $this->request->getPost("name", "int");
-        $user->login = $this->request->getPost("login", "int");
+        $user->name     = $this->request->getPost("name", "int");
+        $user->login    = $this->request->getPost("login", "int");
         $user->password = $this->request->getPost("password", "int");
-        $user->email = $this->request->getPost("email", "int");
-        $user->active = $this->request->getPost("active", "int");
+        $user->email    = $this->request->getPost("email", "int");
+        $user->active   = $this->request->getPost("active", "int");
         
 
         if (!$user->save()) {

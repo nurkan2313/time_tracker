@@ -1,9 +1,3 @@
-<?php
-//
-//echo '<pre>';
-//print_r($lates);
-//echo '</pre>';
-?>
 
 <div class="container">
     <div class="row">
@@ -36,6 +30,8 @@
             <input type='hidden' name='<?= $this->security->getTokenKey() ?>' value='<?= $this->security->getToken() ?>'/>
             </form>
 
+            <button class="btn btn-success" onclick="hide();">Hide</button>
+            <button class="btn btn-success" onclick="show();">Show</button>
             <div class="table-responsive">
                 <table summary="This table shows how to create responsive tables using Bootstrap's default functionality" class="table table-bordered table-hover">
                     <thead>
@@ -46,7 +42,7 @@
                             <?php endforeach; ?>
                         </tr>
                         </thead>
-                    <tbody>
+                    <tbody id="mytab1">
                     <?php foreach ($data as $day=>$val): ?>
 
                         <tr>

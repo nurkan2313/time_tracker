@@ -110,7 +110,6 @@ $("#showMonth").change(function(){
     });
 });
 
-
 function makeSelectable(el) {
     if(el.classList.contains('selected')) {
         console.log(el.classList);
@@ -140,4 +139,37 @@ function getAllSelected() {
         }
     });
 
+}
+
+function hide() {
+
+    $('#mytab1 tr')
+        .show()
+        .filter(function () {
+            let match = true;
+
+            $(this).find('#start').each(function () {
+                console.log($(this));
+                match = false;
+            });
+
+            return match;
+        })
+        .hide();
+}
+
+function show() {
+    $('#mytab1 tr')
+        .show()
+        .filter(function () {
+            let match = false;
+
+            $(this).find('#start').each(function () {
+                console.log($(this));
+                match = true;
+            });
+
+            return match;
+        })
+        .show();
 }
