@@ -131,6 +131,7 @@ class UsersController extends ControllerBase
             }
         }
 
+        $this->view->lates     = $userService->calculateUserLate();
         $this->view->form      = $this->tableDateForm;
         $this->view->tableYear  = $userService->selectYearInWorkTable();
         $this->view->dayOfMonth = $dates->getDay();

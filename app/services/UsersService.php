@@ -270,4 +270,23 @@ class UsersService extends Injectable
         return DateDTO::getYears();
     }
 
+    public function calculateUserLate() {
+        $inThisMonth = new DateDTO();
+
+        $total = UserLate::find([
+            'conditions' => 'month = :month: and year = :year: and user_id = :user_id:',
+            'bind' => [
+                'month'   => $inThisMonth->getMonth(),
+                'year'    => $inThisMonth->getYear(),
+                'user_id' => $this->session->get('AUTH_ID')
+            ]
+        ]);
+        $cntArray = array();
+
+        foreach ($total as $it) {
+            $cntArray[] = [$it->getDay()];
+        }
+        return count($cntArray);
+    }
+
 }
