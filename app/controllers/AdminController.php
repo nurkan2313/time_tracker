@@ -160,4 +160,8 @@ class AdminController extends \Phalcon\Mvc\Controller
         $this->view->form = new StartHourForm();
 
     }
+
+    public function listOfLateUsersAction() {
+        $this->view->list = $this->adminService->listOfLateUsers();
+    }
 }

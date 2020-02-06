@@ -14,6 +14,7 @@ use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Timetracker\Models\StartWorkHour;
 use Timetracker\Models\TimeDimension;
+use Timetracker\Models\UserLate;
 use Timetracker\Models\Users;
 use Timetracker\Models\UserWorkDay;
 
@@ -363,5 +364,61 @@ class AdminService extends Injectable
         $findTime = StartWorkHour::findFirst(1);
         $findTime->setTime($time);
         $findTime->save();
+    }
+
+    public function listOfLateUsers() {
+        $usersArray = array();
+        $queryBuilder = $this->modelsManager->createBuilder();
+
+        $queryBuilder->columns('Timetracker\Models\UserLate.id as id,
+                                Timetracker\Models\UserLate.day as day,
+                                Timetracker\Models\UserLate.month as month,
+                                Timetracker\Models\UserLate.user_id as user_id,
+                                Timetracker\Models\UserLate.year as year,
+                                u.name')
+                        ->from('Timetracker\Models\UserLate')
+                        ->innerJoin('Timetracker\Models\Users', 'u.id = Timetracker\Models\UserLate.user_id', 'u')
+                        ->orderBy('Timetracker\Models\UserLate.id')
+                        ->getQuery()
+                        ->execute();
+        print_r($queryBuilder);
+        die();
+//
+//        foreach ($queryBuilder as $found) {
+//            $usersArray[] = [
+//                'id' => $found->getId(),
+//                'day' => $found->getDay(),
+//                'month' => $found->getMonth(),
+//                'year' => $found->getYear(),
+//                'user_id' => $found->getUserId(),
+//                'user_name' => $found->name
+//            ];
+//        }
+//        return
+    }
+
+    public function removeFromLate($id)
+    {
+        $user_late = UserLate::findFirst($id);
+
+        if (!$user_late->delete()) {
+
+            foreach ($user_late->getMessages() as $message) {
+                $this->flash->error($message);
+            }
+
+            $this->dispatcher->forward([
+                'controller' => "user_late",
+                'action' => 'search'
+            ]);
+            return;
+        }
+
+        $this->flash->success("user_late was deleted successfully");
+
+        $this->dispatcher->forward([
+            'controller' => "user_late",
+            'action' => "index"
+        ]);
     }
 }

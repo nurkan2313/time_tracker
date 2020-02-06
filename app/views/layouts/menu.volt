@@ -27,6 +27,7 @@
                         <a class="dropdown-item" href="{{ url('/admin/manageUsers') }}">Редактировать время пользователей</a>
                         <a class="dropdown-item" href="{{ url('/admin/setHour') }}">Назначить время начала рабочего дня</a>
                         <a class="dropdown-item" href="{{ url('/admin/holiday') }}">Создать выходные дни</a>
+                        <a class="dropdown-item" href="{{ url('/admin/listLate') }}">Посмотреть всех опоздавших</a>
                     </div>
 
                 </li>
@@ -38,7 +39,6 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url('/user/worktable') }}">Рабочая таблица</a>
                         </div>
-
                     </li>
                 {% endif %}
 

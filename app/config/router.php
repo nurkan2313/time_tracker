@@ -24,3 +24,4 @@ $router->add('/admin/disableUser', ['controller' => 'admin', 'action' => 'disabl
 $router->add('/admin/manageUsers', ['controller' => 'admin', 'action' => 'usersManagement']);
 $router->add('/admin/holiday', ['controller' => 'admin', 'action' => 'makeHoliday']);
 $router->add('/admin/setHour', ['controller' => 'admin', 'action' => 'startDayHour']);
+$router->add('/admin/listLate', ['controller' => 'admin', 'action' => 'listOfLateUsers']);
