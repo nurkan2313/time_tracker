@@ -26,6 +26,7 @@
                         <a class="dropdown-item" href="<?= $this->url->get('/admin/disableUser') ?>">Забанить пользователя</a>
                         <a class="dropdown-item" href="<?= $this->url->get('/admin/manageUsers') ?>">Редактировать время пользователей</a>
                         <a class="dropdown-item" href="<?= $this->url->get('/admin/setHour') ?>">Назначить время начала рабочего дня</a>
+                        <a class="dropdown-item" href="<?= $this->url->get('/admin/holiday') ?>">Создать выходные дни</a>
                     </div>
 
                 </li>

@@ -110,6 +110,7 @@ $("#showMonth").change(function(){
     });
 });
 
+
 function makeSelectable(el) {
     if(el.classList.contains('selected')) {
         console.log(el.classList);

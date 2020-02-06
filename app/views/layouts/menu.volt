@@ -26,6 +26,7 @@
                         <a class="dropdown-item" href="{{ url('/admin/disableUser') }}">Забанить пользователя</a>
                         <a class="dropdown-item" href="{{ url('/admin/manageUsers') }}">Редактировать время пользователей</a>
                         <a class="dropdown-item" href="{{ url('/admin/setHour') }}">Назначить время начала рабочего дня</a>
+                        <a class="dropdown-item" href="{{ url('/admin/holiday') }}">Создать выходные дни</a>
                     </div>
 
                 </li>
