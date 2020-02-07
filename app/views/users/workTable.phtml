@@ -1,4 +1,8 @@
-
+<?php
+//echo '<pre>';
+//print_r($data);
+//echo '</pre>';
+?>
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -34,6 +38,7 @@
             <button class="btn btn-success" onclick="show();">Show</button>
             <div class="table-responsive">
                 <table summary="This table shows how to create responsive tables using Bootstrap's default functionality" class="table table-bordered table-hover">
+
                     <thead>
                         <tr>
                             <th>день</th>
@@ -41,62 +46,55 @@
                                 <th><?php echo $user->name; ?></th>
                             <?php endforeach; ?>
                         </tr>
-                        </thead>
+                    </thead>
+
                     <tbody id="mytab1">
-                    <?php foreach ($data as $day=>$val): ?>
+                        <?php foreach ($data as $currentDay=>$data): ?>
+                            <tr>
+                               <td><?php echo $currentDay; ?> </td>
 
-                        <tr>
-                            <td scope="row"> <?php echo $day; ?></td>
+                                <?php foreach ($data as $userData): ?>
+                                    <td>
+                                        <?php if( $userId == $userData['id'] and $currentDay == $dayOfMonth and $userData['month'] = $monthTab ): ?>
 
-                            <?php foreach($val as $userItem): ?>
-                                <?php foreach ($users as $user): ?>
-
-                                    <?php if(!empty($userItem) and $userItem['name'] == $user->name ):  ?>
-
-                                        <td>
-                                            <?php if( $userId == $userItem['id'] and $day == $dayOfMonth and $monthTab == $userItem['month'] ): ?>
-
-                                                <?php if($userItem['start_time'] != null and $userItem['start_time'] != '' and $userItem['start_time'] != 0): ?>
-                                                    <input type="button" class="btn btn-primary"
-                                                           id="start"
-                                                           data-start="stop"
-                                                           onclick="checkInputTime(this);"
-                                                           data-timeinfo=""
-                                                           value="стоп" />
-                                                <?php else: ?>
-                                                    <input type="button" class="btn btn-success"
-                                                           id="start"
-                                                           onclick="checkInputTime(this);"
-                                                           data-timeinfo=""
-                                                           data-start="start"
-                                                           value="старт" />
-                                                <?php endif; ?>
-
-                                                <div id="startTime">
-                                                    <?php echo round($userItem['start_time'], 2); ?>
-                                                </div> -
-                                                <div id="endTime">
-                                                    <?php echo round($userItem['end_time'], 2); ?>
-                                                </div>
+                                            <?php if($userData['start_time'] != null and $userData['start_time'] != '' and $userData['start_time'] != 0): ?>
+                                                <input type="button" class="btn btn-primary"
+                                                       id="start"
+                                                       data-start="stop"
+                                                       onclick="checkInputTime(this);"
+                                                       data-timeinfo=""
+                                                       value="стоп" />
                                             <?php else: ?>
-                                                <div id="startTimeOtherDay">
-                                                    <?php echo round($userItem['start_time'], 2); ?>
-                                                </div> -
-                                                <div id="endTimeOtherDay">
-                                                    <?php echo round($userItem['end_time'], 2); ?>
-                                                </div>
-                                            <?php endif ?>
-                                        </td>
+                                                <input type="button" class="btn btn-success"
+                                                       id="start"
+                                                       onclick="checkInputTime(this);"
+                                                       data-timeinfo=""
+                                                       data-start="start"
+                                                       value="старт" />
+                                            <?php endif; ?>
 
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            <?php endforeach; ?>
-                        </tr>
+                                            <div id="startTime">
+                                                <?php echo round($userData['start_time'], 2); ?>
+                                            </div> -
+                                            <div id="endTime">
+                                                <?php echo round($userData['end_time'], 2); ?>
+                                            </div>
 
-                    <?php endforeach ?>
+                                            <?php else: ?>
+                                            <div id="startTimeOtherDay">
+                                                <?php echo round($userData['start_time'], 2); ?>
+                                            </div> -
+                                            <div id="endTimeOtherDay">
+                                                <?php echo round($userData['end_time'], 2); ?>
+                                            </div>
 
+                                        <?php endif; ?>
+                                    </td>
+                                <?php endforeach ?>
+
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
-
                 </table>
             </div><!--end of .table-responsive-->
         </div>

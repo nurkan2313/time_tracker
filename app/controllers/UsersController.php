@@ -142,6 +142,8 @@ class UsersController extends ControllerBase
         $this->view->totalHour  = $userService->totalHourPerMonth();
         $this->view->assigned   = $userService->calculateAssignedHour();
         $this->view->data       = $userService->getUserWorkDay($request);
+        $this->view->days       = $userService->allCurrentMonthDaysArray();
+
     }
 
     public function logoutAction()

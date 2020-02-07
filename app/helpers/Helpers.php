@@ -15,22 +15,13 @@ class Helpers
 {
     public static function group_by($key, $data, $daysArray) {
         $res = array();
-        $users = Users::find();
-        $usersArray = array();
-
-        foreach ($users as $user) {
-            array_push($usersArray, $user->getName());
-        }
-
-        foreach($daysArray as $cnt) {
-            foreach($data as $key => $day) {
-                if ($day['day'] == $cnt)
-                {
-                    $res[$day['day']][] = $day;
+            foreach($data as $val) {
+                if(array_key_exists($key, $val)){
+                    $result[$val[$key]][] = $val;
+                }else{
+                    $result[""][] = $val;
                 }
             }
-        }
-
         return $res;
     }
 }

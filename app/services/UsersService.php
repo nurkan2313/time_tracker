@@ -5,6 +5,8 @@ use Dates\DTO\DateDTO;
 use Phalcon\Di\Injectable;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use phpDocumentor\Reflection\Types\This;
+use Timetracker\Helper\Helpers;
 use Timetracker\Models\StartWorkHour;
 use Timetracker\Models\TimeDimension;
 use Timetracker\Models\UserLate;
@@ -17,6 +19,7 @@ class UsersService extends Injectable
     public $percentResult;
     public $users;
     public $calendar;
+    public $days;
 
     public function initialize()
     {
@@ -39,6 +42,7 @@ class UsersService extends Injectable
         $dates   = new DateDTO();
         $daysArray = array();
         $usersArray = array();
+        $allCurrentDays = array();
 
         try {
 
@@ -73,12 +77,16 @@ class UsersService extends Injectable
                     'year' => $cal->year
                 ];
 
+                $allCurrentDays[] = [
+                    'day' => $cal->day,
+                ];
             }
 
+            $this->days = $allCurrentDays;
             $users =  Users::find();
 
             foreach ($users as $user) {
-                array_push($usersArray, $user->getId());
+                $usersArray[] = [ 'id' => $user->getId(), 'name' => $user->getName()];
             }
 
             $res = array();
@@ -86,32 +94,27 @@ class UsersService extends Injectable
             foreach ($daysArray as $day) {
                 foreach ($usersArray as $usr) {
 
-                    $query = $this->modelsManager->createQuery("
-                          SELECT DISTINCT 
-                          IFNULL( (SELECT Timetracker\Models\UserWorkDay.start_time
-                                       FROM Timetracker\Models\UserWorkDay
-                                       WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
-                                       and Timetracker\Models\UserWorkDay.day = ".$day['day']." 
-                                       and Timetracker\Models\UserWorkDay.month = ".$day['month']."
-                                       and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as start_time,
-                          IFNULL( (SELECT Timetracker\Models\UserWorkDay.end_time  
-                                       FROM Timetracker\Models\UserWorkDay 
-                                       WHERE Timetracker\Models\UserWorkDay.user_id = ".$usr." 
-                                        and Timetracker\Models\UserWorkDay.day = " .$day['day'] ."
-                                        and Timetracker\Models\UserWorkDay.month = ".$day['month']."
-                                        and Timetracker\Models\UserWorkDay.year = ".$day['year']."), 0) as end_time,
-                          IFNULL( (SELECT  Timetracker\Models\Users.name 
-                                    FROM Timetracker\Models\Users
-                                    WHERE Timetracker\Models\Users.id =  ".$usr." ),0) as name
-                          FROM Timetracker\Models\UserWorkDay ")
-                        ->execute();
+                    $query = UserWorkDay::find([
+                        'conditions'=>'day = :day: and month = :month: and year = :year: and user_id = :user_id:',
+                        'columns' => 'IFNULL(MIN(day), 0) day,
+                                      IFNULL(MIN(start_time), \'0\') start_time, 
+                                      IFNULL(MIN(end_time), \'0\') end_time 
+                                      ',
+                        'bind'=>[
+                            'day' => $day['day'],
+                            'month' => $day['month'],
+                            'year' => $day['year'],
+                            'user_id' => $usr['id']
+                        ]
+                    ]);
+
                     foreach ($query as $item) {
                         $res[$day['day']][] = [
-                            'name' => $item->name,
+                            "day" => $day['day'],
                             'start_time' => $item->start_time,
                             'end_time' => $item->end_time,
                             'month' => $day['month'],
-                            'id' => $usr
+                            'id' => $usr['id']
                         ];
                     }
                 }
@@ -124,9 +127,13 @@ class UsersService extends Injectable
         }
     }
 
+    public function allCurrentMonthDaysArray() {
+        return $this->days;
+    }
+
     public function getUsers() {
         $userBuilder = $this->modelsManager->createBuilder();
-        $userBuilder->columns(['Timetracker\Models\Users.name as name'])
+        $userBuilder->columns(['Timetracker\Models\Users.name as name, Timetracker\Models\Users.id as user_id'])
             ->from('Timetracker\Models\Users')
             ->orderBy('Timetracker\Models\Users.id');
         $data = $userBuilder->getQuery()->execute();
@@ -147,7 +154,6 @@ class UsersService extends Injectable
 
         foreach ($result as $calculateUserStat) {
             $total += ($calculateUserStat->end_time - $calculateUserStat->start_time);
-            echo $total;
         }
 
         return $total;
