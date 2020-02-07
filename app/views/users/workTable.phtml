@@ -3,6 +3,7 @@
 //print_r($data);
 //echo '</pre>';
 ?>
+<?php echo $partialUser; ?>
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -49,51 +50,9 @@
                     </thead>
 
                     <tbody id="mytab1">
-                        <?php foreach ($data as $currentDay=>$data): ?>
-                            <tr>
-                               <td><?php echo $currentDay; ?> </td>
-
-                                <?php foreach ($data as $userData): ?>
-                                    <td>
-                                        <?php if( $userId == $userData['id'] and $currentDay == $dayOfMonth and $userData['month'] = $monthTab ): ?>
-
-                                            <?php if($userData['start_time'] != null and $userData['start_time'] != '' and $userData['start_time'] != 0): ?>
-                                                <input type="button" class="btn btn-primary"
-                                                       id="start"
-                                                       data-start="stop"
-                                                       onclick="checkInputTime(this);"
-                                                       data-timeinfo=""
-                                                       value="стоп" />
-                                            <?php else: ?>
-                                                <input type="button" class="btn btn-success"
-                                                       id="start"
-                                                       onclick="checkInputTime(this);"
-                                                       data-timeinfo=""
-                                                       data-start="start"
-                                                       value="старт" />
-                                            <?php endif; ?>
-
-                                            <div id="startTime">
-                                                <?php echo round($userData['start_time'], 2); ?>
-                                            </div> -
-                                            <div id="endTime">
-                                                <?php echo round($userData['end_time'], 2); ?>
-                                            </div>
-
-                                            <?php else: ?>
-                                            <div id="startTimeOtherDay">
-                                                <?php echo round($userData['start_time'], 2); ?>
-                                            </div> -
-                                            <div id="endTimeOtherDay">
-                                                <?php echo round($userData['end_time'], 2); ?>
-                                            </div>
-
-                                        <?php endif; ?>
-                                    </td>
-                                <?php endforeach ?>
-
-                            </tr>
-                        <?php endforeach; ?>
+                        <?php if($partialUser == 'USER'): ?>
+                            <?php $this->partial('layouts/user_work_table_part'); ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div><!--end of .table-responsive-->

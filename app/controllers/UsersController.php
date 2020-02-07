@@ -25,6 +25,8 @@ class UsersController extends ControllerBase
     public $timeDimension;
     public $userWorkDay;
 
+    const PARTIAL_USER = 'USER';
+
     public function onConstruct()
     {
     }
@@ -137,7 +139,7 @@ class UsersController extends ControllerBase
         $this->view->assigned   = $userService->calculateAssignedHour();
         $this->view->data       = $userService->getUserWorkDay($request);
         $this->view->days       = $userService->allCurrentMonthDaysArray();
-
+        $this->view->partialUser = UsersController::PARTIAL_USER;
     }
 
     public function logoutAction()

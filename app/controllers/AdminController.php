@@ -24,6 +24,8 @@ class AdminController extends \Phalcon\Mvc\Controller
     public $removeForm;
     public $user;
 
+    const PARTIAL_USER = 'ADMIN';
+
     public function onConstruct() {}
 
     public function initialize()
@@ -137,6 +139,7 @@ class AdminController extends \Phalcon\Mvc\Controller
         $this->view->data =  $this->adminService->getUserWorkDay($request);
         $this->view->users =  $this->adminService->getUsers();
         $this->view->form = $this->tableForm;
+        $this->view->partialUser = AdminController::PARTIAL_USER;
     }
 
     public function makeHolidayAction() {

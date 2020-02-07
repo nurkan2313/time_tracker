@@ -1,0 +1,45 @@
+<?php foreach ($data as $currentDay=>$data): ?>
+    <tr>
+        <td><?php echo $currentDay; ?> </td>
+
+        <?php foreach ($data as $userData): ?>
+            <td>
+
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control"  value="<?php echo round($userData['start_time'], 2) ?>" placeholder="<?php echo $userData['start_time'] ?>" aria-label="start_time" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary"
+                                data-day="<?php echo $userData['day']?>"
+                                data-year="<?php echo $userData['year']?>"
+                                data-id="<?php echo $userData['id'] ?>"
+                                data-month="<?php echo $userData['month'] ?>"
+                                onclick="changeUsersTime(this);"
+                                type="button"
+                                id="button-addon2">
+                            Старт
+                        </button>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="<?php echo round($userData['end_time'], 2) ?>" aria-label="end_time" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary"
+                                data-day="<?php echo $userData['day']?>"
+                                data-year="<?php echo $userData['year']?>"
+                                data-id="<?php echo $userData['id'] ?>"
+                                data-month="<?php echo $userData['month'] ?>"
+                                onclick="changeUsersTimeStop(this);"
+                                type="button"
+                                id="button-addon2">
+                            Стоп
+                        </button>
+                    </div>
+                </div>
+            </td>
+
+
+        <?php endforeach ?>
+    </tr>
+<?php endforeach; ?>
